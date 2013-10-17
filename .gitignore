@@ -1,3 +1,13 @@
+# R/Rstudio
+
+.Rproj
+.Rhistory
+XL*.Rd
+rangeString.Rd
+
+
+
+
 #################
 ## Eclipse
 #################
