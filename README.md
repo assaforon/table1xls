@@ -12,7 +12,7 @@ The package's functions save tedious work in converting R output to "normal huma
 
 The underlying functionality to open, write and manipulate spreadsheets is provided by the XLConnect package.
 
-This package is available on CRAN. If you get it from here, then when compiling the package, you will need to roxygenize to get all the help files.
+This package is available on CRAN. If you get it from here, then when compiling the package, you might need to roxygenize to get all the help files.
 
 This is a new package! Comments welcome, to assaf.oron at seattlechildrens.org
 
