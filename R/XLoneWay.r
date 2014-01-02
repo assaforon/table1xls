@@ -39,6 +39,7 @@ XLoneWay<-function(wb,sheet,rowvar,rowTitle="Value",rowNames=NULL,ord=NULL,row1=
   n=length(rowvar)
   tab=table(rowvar,useNA='ifany')
   percents=round(tab*100/n,digits=digits)
+  names(tab)[is.na(names(tab))]="missing"
   tabnames=names(tab)
   tab=c(tab,n)
   names(tab)=c(tabnames,"Total")

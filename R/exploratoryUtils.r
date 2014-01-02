@@ -6,6 +6,10 @@ fancytab2<-function(x,y=NULL,digits=1,sumby=2,rowvar="",rowNames=NULL)
 {
 tout=addmargins(table(x,y,useNA='ifany'))
 pout=round(200*prop.table(tout,margin=sumby),digits)
+rownames(tout)[is.na(rownames(tout))]="missing"
+rownames(pout)[is.na(rownames(pout))]="missing"
+colnames(tout)[is.na(colnames(tout))]="missing"
+colnames(pout)[is.na(colnames(pout))]="missing"
 
 tout=as.data.frame(cbind(rownames(tout),as.data.frame.matrix(tout)))
 names(tout)[1]=rowvar
