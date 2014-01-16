@@ -2,9 +2,9 @@
 
 
 
-fancytab2<-function(x,y=NULL,digits=1,sumby=2,rowvar="",rowNames=NULL)
+fancytab2<-function(x,y=NULL,digits=1,sumby=2,rowvar="",rowNames=NULL,missings='ifany')
 {
-tout=addmargins(table(x,y,useNA='ifany'))
+tout=addmargins(table(x,y,useNA=missings))
 pout=round(200*prop.table(tout,margin=sumby),digits)
 rownames(tout)[is.na(rownames(tout))]="missing"
 rownames(pout)[is.na(rownames(pout))]="missing"
@@ -51,6 +51,9 @@ return(list(Counts=tout,Percent=pout))
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents table?
 ##' 
+##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
+##' @param percents logical: would you like only a count table (\code{FALSE}), or also a percents table side-by-side with the the count table (\code{TRUE}, default)?  
+##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##' @example inst/examples/Ex2way.r 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
@@ -59,13 +62,13 @@ return(list(Counts=tout,Percent=pout))
 ##' @note The tables won't be visible on a spreadsheet, until you use \code{\link{saveWorkbook}} to save and close \code{wb}.
 ##' @note If \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. However, existing data in individual cells will be overwritten.
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,header=FALSE,purge=FALSE,digits=1)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,header=FALSE,purge=FALSE,digits=1,useNA='ifany',percents=TRUE)
 {
 
 if(purge) removeSheet(wb,sheet)
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
-tab=fancytab2(rowvar,colvar,sumby=sumby,rowvar=rowTitle,rowNames=rowNames,digits=digits)
+tab=fancytab2(rowvar,colvar,sumby=sumby,rowvar=rowTitle,rowNames=rowNames,digits=digits,missings=useNA)
 if (is.null(ord)) ord=1:dim(tab$Counts)[1]
 if (!is.null(colNames)) 
 {
@@ -74,13 +77,13 @@ if (!is.null(colNames))
 }  
 writeWorksheet(wb,tab$Counts[ord,],sheet,startRow=row1+2,startCol=col1)
 widt=dim(tab$Counts)[2]+1
-writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1+2,startCol=col1+widt+1)
+if(percents) writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1+2,startCol=col1+widt+1)
 
 
 if(header)
 {
   writeWorksheet(wb,"Counts:",sheet,startRow=row1,startCol=col1)
-  writeWorksheet(wb,"Percent:",sheet,startRow=row1,startCol=col1+widt+1)
+  if(percents) writeWorksheet(wb,"Percent:",sheet,startRow=row1,startCol=col1+widt+1)
   clearRange(wb,sheet,c(row1,col1,row1,col1+widt+1))
 }
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+3), width=-1)

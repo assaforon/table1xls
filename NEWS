@@ -1,0 +1,14 @@
+Version 0.3 (January 2014) Release Notes
+==============================
+
+- Fixed bug on handling missing values in XLoneWay, XLtwoWay, and explicitly added 'useNA' option passed direction on to table().
+- Added option not to write a percents table in XLtwoWay.
+- Fixed bug in XLoneWay that returned counts as text when combine=FALSE.
+- Added this NEWS file...
+
+
+******************************************************
+**
+**   Version 0.2 (October 2013): first release    ****
+**
+******************************************************
