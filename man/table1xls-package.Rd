@@ -9,8 +9,8 @@
 \tabular{ll}{
 Package: \tab table1xls\cr
 Type: \tab Package\cr
-Version: \tab 0.2\cr
-Date: \tab 2013-10-11\cr
+Version: \tab 0.3\cr
+Date: \tab 2014-01-20\cr
 License: \tab GPL 2\cr
 }
 Any statistician collaborating with scientists, especially in the health sciences, has to produce publication-grade summary tables. Most commonly these are "Table 1" style basic demographics, contingency tables, or regression-output summaries. As a minimum, statisticians need to provide tables, from which the lead author can easily and accurately generate these tables.
