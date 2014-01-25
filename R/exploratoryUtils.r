@@ -1,7 +1,7 @@
 
 
 
-
+# This function is internal
 fancytab2<-function(x,y=NULL,digits=1,sumby=2,rowvar="",rowNames=NULL,missings='ifany')
 {
 tout=addmargins(table(x,y,useNA=missings))
@@ -33,6 +33,8 @@ return(list(Counts=tout,Percent=pout))
 ##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. 
 ##' 
 ##' There is an asymmetry between rows and columns, because the tables are converted to data frame in order for \code{\link{writeWorksheet}} to export them.
+##' 
+##' If you want to avoid the margins and percentage tables on the side, use \code{\link{XLgeneric}}.
 ##' 
 ##' 
 ##' @title Two-way Contingency Tables exported to a spreadsheet
