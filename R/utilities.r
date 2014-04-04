@@ -21,6 +21,7 @@
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
 ##' 
 ##' @seealso \code{\link{loadWorkbook}}, \code{\link{saveWorkbook}}
+##' @export
 
 XLwriteOpen<-function(path)
 {
@@ -56,9 +57,12 @@ loadWorkbook(path,create=TRUE)
 ##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
 ##' 
+##' @export
+
 rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(round(min(x,na.rm=na.rm),digits),'-',round(max(x,na.rm=na.rm),digits),sep=sep)
 
 ##' @rdname rangeString
+#' @export
 
 iqrString<-function(x,digits=1,sep='-',quantmeth=7,na.rm=FALSE,...) 
 {
@@ -67,17 +71,21 @@ iqrString<-function(x,digits=1,sep='-',quantmeth=7,na.rm=FALSE,...)
 }
 
 ##' @rdname rangeString
+#' @export
 
 roundmean<-function(x,digits=1,na.rm=FALSE,...) round(mean(x,na.rm=na.rm),digits=digits)
 
 ##' @rdname rangeString
+#' @export
 
 roundmedian<-function(x,digits=1,na.rm=FALSE,...) round(median(x,na.rm=na.rm),digits=digits)
 
 ##' @rdname rangeString
+#' @export
 
 roundSD<-function(x,digits=1,na.rm=FALSE,...) round(sd(x,na.rm=na.rm),digits=digits)
 
 ##' @rdname rangeString
+#' @export
 
 emptee<-function(x,...) ""

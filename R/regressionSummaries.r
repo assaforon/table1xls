@@ -26,6 +26,7 @@
 ##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional title.
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 
+##' @export
 
 XLregresSummary=function(wb,sheet,varnames,betas,SE,transfun=identity,effname="Difference",confac=qnorm(0.975),roundig=2,pfun=function(x) 2*pnorm(-abs(x)),pround=3,row1=1,col1=1,purge=FALSE,title=NULL)
 {	
@@ -48,5 +49,6 @@ if(!is.null(title)) {
   clearRange(wb,sheet,c(row1,col1,row1,col1+1))
 }
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+3), width=-1)
+saveWorkbook(wb)
 } 
                

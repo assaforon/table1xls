@@ -30,6 +30,7 @@
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##'
+##' @export
 
 XLoneWay<-function(wb,sheet,rowvar,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,digits=1,combine=TRUE,useNA='ifany')
 { 
@@ -50,7 +51,7 @@ XLoneWay<-function(wb,sheet,rowvar,rowTitle="Value",rowNames=NULL,ord=NULL,row1=
 
 if(combine) {
     
-    dout=data.frame(cbind(names(tab),paste(tab,' (',percentab,')',sep="")))
+    dout=data.frame(cbind(names(tab),paste(tab,' (',percentab,'%)',sep="")))
     names(dout)=c(rowTitle,"Count (%)")
     
 } else {
@@ -61,5 +62,5 @@ if(combine) {
   writeWorksheet(wb,dout[ord,],sheet,startRow=row1,startCol=col1)   
 
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+5), width=-1)
-  
+saveWorkbook(wb)
 }  ### Function end

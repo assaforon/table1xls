@@ -3,7 +3,7 @@
 
 ##' This function is a convenience wrapper for getting practically any rectangular data structure into a spreadsheet, without worrying about conversion or spreadsheet-writing technicalities.
 ##' 
-##' If the structure is not a data frame (or inherited from one), but a table or matrix, the function will convert it into one using \code{\link{as.data.frame.matrix}}, because that's what the exporting function \code{\link{writeWorksheet}} can export.
+##' If the structure is not a data frame (or inherited from one), but a table or matrix, the function will convert it into one using \code{\link{as.data.frame.matrix}}, because data frames are what the exporting function \code{\link{writeWorksheet}} can export.
 ##' 
 ##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. 
 ##' 
@@ -26,6 +26,8 @@
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##'
+##' @export
+##' @import XLConnect
 
 XLgeneric<-function(wb,sheet,dataset,addRownames=FALSE,rowNames=rownames(dataset),rowTitle="Name",row1=1,col1=1,purge=FALSE)
 { 

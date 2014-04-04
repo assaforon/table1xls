@@ -1,11 +1,13 @@
-Version 0.3 (January 2014) Release Notes
+Version 0.3 Release Notes (spring 2014, targeting R 3.1.0) 
 ==============================
 
-- Fixed bug on handling missing values in XLoneWay, XLtwoWay, and explicitly added 'useNA' option passed direction on to table().
+- Added `XLgeneric` for exporting a generic rectangular dataset
+- Fixed bug on handling missing values in XLoneWay, XLtwoWay, and explicitly added 'useNA' option passed directly on to table().
 - Added option not to write a percents table in XLtwoWay.
-- Fixed bug in XLoneWay that returned counts as text when combine=FALSE.
+- Fixed bug in XLoneWay that returned counts as text when `combine=FALSE`.
 - Added this NEWS file...
 
 
 Version 0.2 (October 2013): first release   
 =====================
+Hello World!

@@ -63,6 +63,7 @@ return(list(Counts=tout,Percent=pout))
 ##' @note This function uses the internal function \code{fancytab2} which produces 2-way tables with counts, percentages and margins. 
 ##' @note The tables won't be visible on a spreadsheet, until you use \code{\link{saveWorkbook}} to save and close \code{wb}.
 ##' @note If \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. However, existing data in individual cells will be overwritten.
+##' @export
 
 XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,header=FALSE,purge=FALSE,digits=1,useNA='ifany',percents=TRUE)
 {
@@ -89,6 +90,7 @@ if(header)
   clearRange(wb,sheet,c(row1,col1,row1,col1+widt+1))
 }
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+3), width=-1)
+saveWorkbook(wb)
 
 }  ### Function end
 
@@ -124,6 +126,7 @@ setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+3), width=-1)
 ##' @param ... parameters passed on to \code{fun1$fun,fun2$fun}
 ##' @param title character: title to be placed above table.
 ##'
+##' @export
 
 XLunivariate<-function(wb,sheet,calcvar,rowvar=rep("All",length(calcvar)),fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),rowTitle="",rowNames=NULL,ord=NULL,row1=1,col1=1,title="Summaries",purge=FALSE,...)
 { 
@@ -142,7 +145,7 @@ writeWorksheet(wb,outdat[ord,],sheet,startRow=row1+2,startCol=col1)
 writeWorksheet(wb,title,sheet,startRow=row1,startCol=col1)
 clearRange(wb,sheet,c(row1,col1,row1,col1+1))
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+3), width=-1)
-
+saveWorkbook(wb)
 }
   
 
