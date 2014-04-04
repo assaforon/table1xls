@@ -30,7 +30,7 @@ return(list(Counts=tout,Percent=pout))
 ##' 
 ##' The tables are then exported to worksheet \code{sheet} in workbook \code{wb}, using \code{\link{writeWorksheet}} from the XLConnect package.
 ##' 
-##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. 
+##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist.  Also, the changes are automatically saved to file.
 ##' 
 ##' There is an asymmetry between rows and columns, because the tables are converted to data frame in order for \code{\link{writeWorksheet}} to export them.
 ##' 
@@ -100,6 +100,8 @@ saveWorkbook(wb)
 ##' Calculates univariate summary statistics (optionally stratified), and exports the formatted output to a spreadsheet.
 ##'
 ##' This function evaluates up to 2 univariate, functions on the input vector \code{calcvar}, either across the dataset or across strata defined by \code{rowvar}, and returns a single-column table with formatted results. 
+##' 
+##' If the named sheet does not yet exist, the function will create it. Also, the changes are automatically saved to file.
 ##' 
 ##' The cell can be formatted to show a combined result, e.g. "Mean (SD)" which is the default. Tne function is quite mutable: both \code{fun1$fun, fun2$fun} and the strings separating their formatted output can be user-defined. The functions can return either a string (i.e., a formatted output) or a number that will be interpreted as a string in subsequent formatting.
 ##' The default calls \code{\link{roundmean},\link{roundSD}} and prints the summaries in \code{"mean(SD)"} format.

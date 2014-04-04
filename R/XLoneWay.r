@@ -6,7 +6,7 @@
 ##' 
 ##' The table is then exported to worksheet \code{sheet} in workbook \code{wb}, either using the format \code{"Count(percent)"} (if \code{combine=TRUE}), or as two separate columns in the same table. Worksheet writing uses \code{\link{writeWorksheet}} from the XLConnect package.
 ##' 
-##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. 
+##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. Also, the changes are automatically saved to file.
 ##' 
 ##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
@@ -24,7 +24,7 @@
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
 ##' @param row1,col1 numeric: the first row and column occupied by the table. 
 ##' @param purge logical should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
-##' @param digits numeric: how many digits (after the decimal point) to show in the percentab?
+##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=200, 0 otherwise.
 ##' @param combine logical: should counts and percentab be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default \code{TRUE}) 
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' 
@@ -32,7 +32,7 @@
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,digits=1,combine=TRUE,useNA='ifany')
+XLoneWay<-function(wb,sheet,rowvar,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,digits=ifelse(length(rowvar)>=200,1,0),combine=TRUE,useNA='ifany')
 { 
   
   if(purge) removeSheet(wb,sheet)

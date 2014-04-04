@@ -12,5 +12,4 @@ XLunivariate(book2,"weightByDiet",ChickWeight$weight,ChickWeight$Diet,
 XLunivariate(book2,"weightByAge",ChickWeight$weight,ChickWeight$Time,
              title="Mean Weights by Age",rowTitle="Age (Days)",seps=rep("",3),
              fun2=list(fun=emptee,name=""))
-saveWorkbook(book2)
 cat("Look for",paste(getwd(),"chick2.xls",sep='/'),"to see the results!\n")

@@ -5,6 +5,7 @@ Version 0.3 Release Notes (spring 2014, targeting R 3.1.0)
 - Fixed bug on handling missing values in XLoneWay, XLtwoWay, and explicitly added 'useNA' option passed directly on to table().
 - Added option not to write a percents table in XLtwoWay.
 - Fixed bug in XLoneWay that returned counts as text when `combine=FALSE`.
+- Added a saveWorkbook() command to all export functions, so that all changes are immediately saved to file.
 - Added this NEWS file...
 
 

@@ -5,7 +5,7 @@
 ##' 
 ##' If the structure is not a data frame (or inherited from one), but a table or matrix, the function will convert it into one using \code{\link{as.data.frame.matrix}}, because data frames are what the exporting function \code{\link{writeWorksheet}} can export.
 ##' 
-##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. 
+##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. Also, the changes are automatically saved to file. 
 ##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
 ##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet. See \code{\link{setStyleAction}} to control the output style. For two-way contingency tables, see \code{\link{XLtwoWay}}.

@@ -24,7 +24,6 @@ XLregresSummary(book4,"Multiplier",varnames=quakenames,
                 pround=6,title="Relative Ground Acceleration Effects",transfun=function(x) 10^x,
                 effname="Multiplier",confac=qt(0.975,179),pfun=function(x) 2*pt(-abs(x),df=179))
 
-saveWorkbook(book4)
 cat("Look for",paste(getwd(),"attenu.xls",sep='/'),"to see the results!\n")
 
 ### lm() does not take account of station or event level grouping.

@@ -2,6 +2,8 @@
 ##' Regression Summary Tables exported to a spreadsheet
 ##' 
 ##' Takes a vector of regression effect estimates and the corresponding standard errors, transforms to "human scale" if requested, calculates confidence-intervals, and exports a standard formatted summary table to a spreadsheet.
+##' 
+##' If the named sheet does not yet exist in the target file, the function will create it. Also, the changes are automatically saved to file.
 ##'
 ##' This function produces a standard scientific-article regression summary table, given the raw regression output. The output table has 4 columns: effect name, its (optionally transformed) magnitude, a symmetric confidence interval (likewise transformed) and p-value.
 ##'

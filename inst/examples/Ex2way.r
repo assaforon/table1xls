@@ -20,5 +20,4 @@ XLtwoWay(book3,"PartnersAKQcounts",cut(hand1,c(0,2:6,14)-0.5),cut(hand2,c(0,2:5,
          rowTitle="Hand 1 vs. Hand 2",rowNames=c(handNames[-5],5,"6 or more","Total"),
          colNames=c(handNames,"Total"),header=FALSE,row1=10,sumby=2)
 
-saveWorkbook(book3)
 cat("Look for",paste(getwd(),"hands.xls",sep='/'),"to see the results!\n")

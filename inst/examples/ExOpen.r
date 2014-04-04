@@ -17,7 +17,7 @@ blankbook<-XLwriteOpen(newPath)
 # The spreadsheet is only in R's memory. The next batch will save it.
 
 ## Batch 3
-saveWorkbook(blankbook)
+XLConnect::saveWorkbook(blankbook)
 cat("Now there should be a blank file called",newPath, "- Check it out!\n")
 
 ## Now: writing into the file and resaving
@@ -26,9 +26,9 @@ cat("Now there should be a blank file called",newPath, "- Check it out!\n")
 
 ## Batch 4
 # Excel showed 1 blank sheet. But for R, there are 0 sheets until you create some.
-createSheet(blankbook,"one") 
-writeWorksheet(blankbook,"Something Sillee!!!",sheet='one') 
-saveWorkbook(blankbook)
+XLConnect::createSheet(blankbook,"one") 
+XLConnect::writeWorksheet(blankbook,"Something Sillee!!!",sheet='one') 
+XLConnect::saveWorkbook(blankbook)
 
 # Now it's not blank anymore - Check it out... 
 # You will notice XLConnect has interpreted the string 
@@ -42,7 +42,7 @@ saveWorkbook(blankbook)
 ## Batch 5
 
 blankbook2<-XLwriteOpen(newPath)
-saveWorkbook(blankbook2)
+XLConnect::saveWorkbook(blankbook2)
 
 #### Now the file is blank again - Check it out!
 #### All done!
