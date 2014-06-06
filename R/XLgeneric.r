@@ -45,5 +45,6 @@ XLgeneric<-function(wb,sheet,dataset,addRownames=FALSE,rowNames=rownames(dataset
   writeWorksheet(wb,dataset,sheet,startRow=row1,startCol=col1)   
 
 setColumnWidth(wb, sheet = sheet, column = col1:(dim(dataset)[2]+1), width=-1)
-  
+
+saveWorkbook(wb)
 }  ### Function end

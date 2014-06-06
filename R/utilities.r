@@ -89,3 +89,24 @@ roundSD<-function(x,digits=1,na.rm=FALSE,...) round(sd(x,na.rm=na.rm),digits=dig
 #' @export
 
 emptee<-function(x,...) ""
+
+##' Write text to a single cell
+##' 
+##'   
+##' Write text to a single cell in a specified file and sheet, and save the file.
+##' 
+##' 
+##' Since XLConnect only exports data to spreadsheets as `data.frame`, this function sends the text as an on-the-fly `data.frame` with one column and one row, and without writing the header. 
+##' 
+##' @param wb a \code{\link[XLConnect]{workbook-class}} object
+##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
+##' 
+##' @note If the specified \code{sheet} does not exist, the function will create it, assuming that was the user's intent (e.g., add a text-only sheet with explanations to a file.) This is hard-coded, because the inadvertent creation of single-text sheets due to typos can be easily discovered upon opening the file :) 
+##' 
+XLaddText<-function(wb,sheet,text,row1,col1)
+{
+  if(!existsSheet(wb,sheet)) createSheet(wb,sheet)  
+  writeWorksheet(wb,data=text,sheet=sheet,startRow=row1,startCol=col1,header=FALSE)
+  saveWorkbook(wb)
+}
+
