@@ -4,14 +4,12 @@ Version 0.3.1 Release Notes (early summer 2014)
 Bug fixes:
 
 - Added automatic file-saving to `XLgeneric` (as promised by help text)
-- `row1,col1` are now "as advertised", i.e. the export really begins at the cell you tell it to.
+- `row1,col1` are now "as advertised", i.e. the export really begins at the cell you tell it to (in some functions it was only "approximate").
 
 New features:
 
-- Added `XLaddText` for putting a text string anywhere in the file. This function is now the go-to method for adding titles to tables in all other export functions.
+- Added `XLaddText` for putting a text string anywhere in the file. This function is now the behind-the-scenes method for adding titles to tables in all other export functions.
 - `XLregresSummary` now also accepts a matrix as input, instead of providing effect names, point estimates and SEs separately (which is still possible). 
-
-
 
 
 Version 0.3 Release Notes (spring 2014, targeting R 3.1.0) 

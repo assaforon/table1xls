@@ -96,17 +96,34 @@ emptee<-function(x,...) ""
 ##' Write text to a single cell in a specified file and sheet, and save the file.
 ##' 
 ##' 
-##' Since XLConnect only exports data to spreadsheets as `data.frame`, this function sends the text as an on-the-fly `data.frame` with one column and one row, and without writing the header. 
+##' Since XLConnect only exports data to spreadsheets as `data.frame`, this function sends the text as an on-the-fly `data.frame` with one column and one row, and without writing the header or the row name. 
+##' 
+##' @example inst/examples/ExGeneric.r
 ##' 
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
-##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
+##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}.
+##' @param text character: the text to be written to file.
+##' @param row1,col1 integer: the row and column for the output. 
 ##' 
 ##' @note If the specified \code{sheet} does not exist, the function will create it, assuming that was the user's intent (e.g., add a text-only sheet with explanations to a file.) This is hard-coded, because the inadvertent creation of single-text sheets due to typos can be easily discovered upon opening the file :) 
 ##' 
-XLaddText<-function(wb,sheet,text,row1,col1)
+XLaddText<-function(wb,sheet,text,row1=1,col1=1)
 {
   if(!existsSheet(wb,sheet)) createSheet(wb,sheet)  
   writeWorksheet(wb,data=text,sheet=sheet,startRow=row1,startCol=col1,header=FALSE)
+
+#  if(wrap)
+#  {
+#    cs <- createCellStyle(wb)
+#    setWrapText(cs, wrap = TRUE)
+#    setCellStyle(wb,sheet=sheet,row=row1,col=col1,cellstyle = cs)
+#    setRowHeight(wb, sheet = sheet, row=row1, height=-1)
+#  } else  
+setColumnWidth(wb, sheet = sheet, column = col1, width=-1)
+  
   saveWorkbook(wb)
 }
+
+# Inactive:
+# @param wrap logical: should text be wrapped keeping its width as is  - or should column width auto-matched to fit text on one line? (default \code{FALSE})
 

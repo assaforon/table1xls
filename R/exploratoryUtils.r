@@ -140,7 +140,6 @@ saveWorkbook(wb)
 ##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional header.
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param ... parameters passed on to \code{fun1$fun,fun2$fun}
-##' @param title character: title to be placed above table.
 ##'
 ##' @export
 

@@ -1,10 +1,10 @@
 Package: table1xls
 Type: Package
-Title: Produces summary tables in the format most often encountered in scientific articles, and exports them to spreadsheet format (.xls or .xlsx)
+Title: Produces summary tables and exports them to multi-tab spreadsheet format (.xls or .xlsx)
 Version: 0.3.1
 Date: 2014-06-10
 Author: Assaf P. Oron
 Maintainer: Assaf P. Oron <assaf.oron@seattlechildrens.org>
-Description: Produces summary tables for descriptives and for regression results. Exports the tables to .xls or .xlsx multi-tab spreadsheets, using the XLConnect package.
+Description: A collection of convenience wrappers for producing and exporting various commonly-used numerical table types to .xls/.xlsx multi-tab spreadsheets while controlling spreadsheet position and layout, via XLConnect functionality.
 License: GPL-2
 Imports: XLConnect

@@ -26,7 +26,7 @@
 
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param roundig numeric: how many digits (after the decimal point) to round the effect estimate to?
-##' @param pround numeric: how many digits (after the decimal point) to round the p-value to?
+##' @param pround numeric: how many digits (after the decimal point) to round the p-value to? P-values rounded down to zero will show up as "<" the smallest nonzero value, e.g. with the default \code{pround=3} p-values smaller than 0.0005 will show up as "<0.001".
 ##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional title.
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 
@@ -58,6 +58,7 @@ CIlow=transfun(betas-SE*confac)
 CIhigh=transfun(betas+SE*confac)
 dout$Confidence=paste("(",round(CIlow,roundig),',',round(CIhigh,roundig),")",sep='')
 dout$Pvalue=round(pfun(betas/SE),pround)
+dout$Pvalue[dout$Pvalue<10^(-pround)]=paste('<',10^(-pround),sep='')
 
 writeWorksheet(wb,dout,sheet,startRow=row1,startCol=col1)
 
