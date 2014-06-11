@@ -19,6 +19,7 @@
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
 ##' @param rowvar vector: the categorical variable (logical, numeric, character, factor, etc.) to be tabulated
+##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character: vector of row names. Default behavior (\code{NULL}): automatically determined from data
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
@@ -32,12 +33,18 @@
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,digits=ifelse(length(rowvar)>=200,1,0),combine=TRUE,useNA='ifany')
+XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,digits=ifelse(length(rowvar)>=200,1,0),combine=TRUE,useNA='ifany')
 { 
   
   if(purge) removeSheet(wb,sheet)
   if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
   
+  if(!is.null(title))  ### Adding a title
+  {
+    XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
+    row1=row1+1
+  }
+    
   n=length(rowvar)
   tab=table(rowvar,useNA=useNA)
   percentab=round(tab*100/n,digits=digits)

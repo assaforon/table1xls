@@ -49,7 +49,8 @@ return(list(Counts=tout,Percent=pout))
 ##' @param rowNames,colNames character vector of row and column names. Default behavior (\code{NULL}): automatically determined from data
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
 ##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional header.
-##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added above the tables? (default \code{FALSE})
+##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
+##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added right above the tables? (default \code{FALSE}; ignored in any case if \code{percents=FALSE})
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents table?
 ##' 
@@ -65,30 +66,42 @@ return(list(Counts=tout,Percent=pout))
 ##' @note If \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. However, existing data in individual cells will be overwritten.
 ##' @export
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,header=FALSE,purge=FALSE,digits=1,useNA='ifany',percents=TRUE)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=1,useNA='ifany',percents=TRUE)
 {
 
 if(purge) removeSheet(wb,sheet)
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
+### Producing counts and percents table via the internal function 'fancytab2'
 tab=fancytab2(rowvar,colvar,sumby=sumby,rowvar=rowTitle,rowNames=rowNames,digits=digits,missings=useNA)
+
+
+if(!is.null(title))  ### Adding a title
+{
+  XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
+  row1=row1+1
+}
+
+
 if (is.null(ord)) ord=1:dim(tab$Counts)[1]
 if (!is.null(colNames)) 
 {
     names(tab$Counts)[-1]=colNames
     names(tab$Percent)[-1]=colNames
-}  
-writeWorksheet(wb,tab$Counts[ord,],sheet,startRow=row1+2,startCol=col1)
-widt=dim(tab$Counts)[2]+1
-if(percents) writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1+2,startCol=col1+widt+1)
-
-
-if(header)
-{
-  writeWorksheet(wb,"Counts:",sheet,startRow=row1,startCol=col1)
-  if(percents) writeWorksheet(wb,"Percent:",sheet,startRow=row1,startCol=col1+widt+1)
-  clearRange(wb,sheet,c(row1,col1,row1,col1+widt+1))
 }
+
+widt=dim(tab$Counts)[2]+1
+if(percents && header)  ### adding headers indicating 'counts' and 'percents'
+{
+  XLaddText(wb,sheet,"Counts:",row1=row1,col1=col1)
+  XLaddText(wb,sheet,"Percent:",row1=row1,col1=col1+widt+1)
+  row1=row1+1
+}
+writeWorksheet(wb,tab$Counts[ord,],sheet,startRow=row1,startCol=col1)
+if(percents) writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1,startCol=col1+widt+1)
+
+
+
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+3), width=-1)
 saveWorkbook(wb)
 
@@ -120,6 +133,7 @@ saveWorkbook(wb)
 ##' @param rowvar vector: categorical variable to stratify \code{calcvar}'s summaries over. Default behavior if left unspecified, is to calculate overall summaries with the row title "All". 
 ##' @param fun1,fun2 two lists describing the utility functions that will calculate the statistics. Each list has a \code{fun} component for the function, and a \code{name} component for its name as it would appear in the column header.
 ##' @param seps character vector of length 3, specifying the formatted separators before the output of \code{fun1$fun}, between the two outputs, and after the output of \code{fun2$fun}. Default behavior encloses the second output in parentheses. See 'Examples'.
+##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character vector of row names. Default behavior (\code{NULL}): automatically determined from data
 ##' @param ord numeric vector specifying row-index order (i.e., a re-ordering of \code{rowvar}'s levels) in the produced table. Default (\code{NULL}) is no re-ordering.
@@ -130,7 +144,7 @@ saveWorkbook(wb)
 ##'
 ##' @export
 
-XLunivariate<-function(wb,sheet,calcvar,rowvar=rep("All",length(calcvar)),fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),rowTitle="",rowNames=NULL,ord=NULL,row1=1,col1=1,title="Summaries",purge=FALSE,...)
+XLunivariate<-function(wb,sheet,calcvar,rowvar=rep("All",length(calcvar)),fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),title=NULL,rowTitle="",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,...)
 { 
 if(purge) removeSheet(wb,sheet)  
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
@@ -143,9 +157,13 @@ if (is.null(rowNames)) rowNames=names(num1)
 outdat=data.frame(cbind(rowNames,paste(seps[1],num1,seps[2],num2,seps[3],sep='')))
 names(outdat)=c(rowTitle,paste(seps[1],fun1$name,seps[2],fun2$name,seps[3],sep=''))
 
-writeWorksheet(wb,outdat[ord,],sheet,startRow=row1+2,startCol=col1)
-writeWorksheet(wb,title,sheet,startRow=row1,startCol=col1)
-clearRange(wb,sheet,c(row1,col1,row1,col1+1))
+if(!is.null(title))  ### Adding a title
+{
+  XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
+  row1=row1+1
+}
+writeWorksheet(wb,outdat[ord,],sheet,startRow=row1,startCol=col1)
+
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+3), width=-1)
 saveWorkbook(wb)
 }

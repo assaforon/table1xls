@@ -18,6 +18,7 @@
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
 ##' @param dataset the rectangular structure to be written. Can be a data frame, table, matrix or similar.
+##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param addRownames logical: should a column of row names be added to the left of the structure? (default \code{FALSE})
 ##' @param rowTitle character: the title to be placed above the row name column (default "Name")
 ##' @param rowNames character: vector of row names. Default \code{rownames(dataset)}, but relevant only if \code{addRownames=TRUE}.
@@ -29,7 +30,7 @@
 ##' @export
 ##' @import XLConnect
 
-XLgeneric<-function(wb,sheet,dataset,addRownames=FALSE,rowNames=rownames(dataset),rowTitle="Name",row1=1,col1=1,purge=FALSE)
+XLgeneric<-function(wb,sheet,dataset,title=NULL,addRownames=FALSE,rowNames=rownames(dataset),rowTitle="Name",row1=1,col1=1,purge=FALSE)
 { 
   
   if (!("data.frame" %in% class(dataset))) dataset=as.data.frame.matrix(dataset)
@@ -37,6 +38,11 @@ XLgeneric<-function(wb,sheet,dataset,addRownames=FALSE,rowNames=rownames(dataset
   if(purge) removeSheet(wb,sheet)
   if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
   
+  if(!is.null(title))  ### Adding a title
+  {
+    XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
+    row1=row1+1
+  }
   if(addRownames)
   {
       dataset=cbind(rowNames,dataset)
