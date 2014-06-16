@@ -1,14 +1,13 @@
 ##' 
 ##' Regression Summary Tables exported to a spreadsheet
 ##' 
-##' Takes a vector of regression effect estimates and the corresponding standard errors, transforms to "human scale" if requested, calculates confidence-intervals, and exports a standard formatted summary table to a spreadsheet.
+##' Takes regression effect estimates and the corresponding standard errors, transforms to "human scale" if requested, calculates confidence-intervals and p-values, and exports a standard formatted summary table to a spreadsheet.
 ##' 
-##' If the named sheet does not yet exist in the target file, the function will create it. Also, the changes are automatically saved to file.
-##'
-##' This function produces a standard scientific-article regression summary table, given the raw regression output. The output table has 4 columns: effect name, its (optionally transformed) magnitude, a symmetric confidence interval (likewise transformed) and p-value. The estimates can be provided as separate vectors of point estimates (\code{betas}) and standard errors (\code{SE}), or as a single matrix for \code{betas}. In the latter case, as a default the effect names will be \code{rownames(betas)}, unless a vector with (hopefully) more descriptive names is provided via \code{varnames}.
+##' This function produces a standard scientific-article regression summary table, given the raw regression output. The resulting table has 4 columns: effect name, its (optionally transformed) magnitude, a probabilistically symmetric confidence interval (likewise transformed), and p-value. The formatted table is exported to \code{sheet}, and the file is immediately saved.
 ##' 
-##'
-##'The formatted table is exported to \code{sheet}, and the file is immediately saved.
+##' The input can be provided as separate vectors of point estimates (\code{betas}) and standard errors (\code{SE}), or as a single matrix for \code{betas}. In the latter case, as a default the effect names will be \code{rownames(betas)}, unless a vector with more descriptive names is provided via \code{varnames}.
+##' 
+##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
@@ -27,7 +26,7 @@
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param roundig numeric: how many digits (after the decimal point) to round the effect estimate to?
 ##' @param pround numeric: how many digits (after the decimal point) to round the p-value to? P-values rounded down to zero will show up as "<" the smallest nonzero value, e.g. with the default \code{pround=3} p-values smaller than 0.0005 will show up as "<0.001".
-##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional title.
+##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 
 ##' @export

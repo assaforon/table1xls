@@ -22,24 +22,24 @@ if(!is.null(rowNames)) pout[,1]=rowNames
 return(list(Counts=tout,Percent=pout))
 }
 
-##' Producing 2-way descriptive tables, with percentages, and exporting to .xls/.xlsx Format
+##' Produces 2-way contingency tables, optionally with percentages, exports them to a spreadsheet, and saves the file.
 ##' 
-##' This function produces two identical tables side by side, one with the cross-tabulated counts of unique values of \code{rowvar, colvar}
-##' and the other with percentages, calculated either by row (\code{sumby=1}) or column (\code{sumby=2}).
-##' Row and column margins are also automatically produced.
-##' 
-##' The tables are then exported to worksheet \code{sheet} in workbook \code{wb}, using \code{\link{writeWorksheet}} from the XLConnect package.
-##' 
-##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist.  Also, the changes are automatically saved to file.
+##' This function produces two identically-sized tables side by side, one with the cross-tabulated counts of unique values of \code{rowvar, colvar}
+##' and the other with percentages, calculated either by row (\code{sumby=1}, default) or column (\code{sumby=2}).
+##' Row and column margins are also automatically produced. ##' Tables are automatically saved to the file associated with the \code{wb} spreadsheet object. 
 ##' 
 ##' There is an asymmetry between rows and columns, because the tables are converted to data frame in order for \code{\link{writeWorksheet}} to export them.
+
+##' If you want to avoid the percentage tables on the side, choose \code{percents=FALSE}. If you also want no margins, just use the simpler function \code{\link{XLgeneric}}.
 ##' 
-##' If you want to avoid the margins and percentage tables on the side, use \code{\link{XLgeneric}}.
+
+##' @note The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist.
+#' 
+##' @note If \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. Only existing data in individual cells that are part of the exported tables' target range will be overwritten. If you do want to clear an existing sheet while exporting the new tables, set \code{purge=TRUE}. This behavior, and the usage of \code{purge}, are the same across all \code{table1xls} export functions.
 ##' 
 ##' 
 ##' @title Two-way Contingency Tables exported to a spreadsheet
 ##'
-##' 
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}.
 ##' @param rowvar vector: categorical variable (logical, numeric, character, factor, etc.) for the table's rows
@@ -48,7 +48,7 @@ return(list(Counts=tout,Percent=pout))
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames,colNames character vector of row and column names. Default behavior (\code{NULL}): automatically determined from data
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
-##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional header.
+##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added right above the tables? (default \code{FALSE}; ignored in any case if \code{percents=FALSE})
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
@@ -62,8 +62,7 @@ return(list(Counts=tout,Percent=pout))
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
 ##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet. See \code{\link{setStyleAction}} to control the output style. If interested in one-way tables, see \code{\link{XLoneWay}}.
 ##' @note This function uses the internal function \code{fancytab2} which produces 2-way tables with counts, percentages and margins. 
-##' @note The tables won't be visible on a spreadsheet, until you use \code{\link{saveWorkbook}} to save and close \code{wb}.
-##' @note If \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. However, existing data in individual cells will be overwritten.
+
 ##' @export
 
 XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=1,useNA='ifany',percents=TRUE)
@@ -110,18 +109,19 @@ saveWorkbook(wb)
 
 ##' Univariate Statistics Exported to Excel
 ##' 
-##' Calculates univariate summary statistics (optionally stratified), and exports the formatted output to a spreadsheet.
+##' Calculates univariate summary statistics (optionally stratified), exports the formatted output to a spreadsheet, and saves the file.
 ##'
-##' This function evaluates up to 2 univariate, functions on the input vector \code{calcvar}, either across the dataset or across strata defined by \code{rowvar}, and returns a single-column table with formatted results. 
-##' 
-##' If the named sheet does not yet exist, the function will create it. Also, the changes are automatically saved to file.
+##' This function evaluates up to 2 univariate functions on the input vector \code{calcvar}, either as a single sample, or grouped by strata defined via \code{rowvar}. It produces a single-column table, each cell containing the formatted results from the two functions. The table is exported to a spreadsheet and the file is saved. 
 ##' 
 ##' The cell can be formatted to show a combined result, e.g. "Mean (SD)" which is the default. Tne function is quite mutable: both \code{fun1$fun, fun2$fun} and the strings separating their formatted output can be user-defined. The functions can return either a string (i.e., a formatted output) or a number that will be interpreted as a string in subsequent formatting.
 ##' The default calls \code{\link{roundmean},\link{roundSD}} and prints the summaries in \code{"mean(SD)"} format.
+##' 
+##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 
-##' @return The function returns invisibly, after writing the data into \code{sheet}.
+##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
+##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
-##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet, \code{\link{rangeString}} for some utilities that can be used as \code{fun1$fun,fun2$fun}. For one-way (univariate) contingency tables, \code{\link{XLoneWay}}. See \code{\link{setStyleAction}} to control the output style. 
+##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet, \code{\link{rangeString}} for some utilities that can be used as \code{fun1$fun,fun2$fun}. For one-way (univariate) contingency tables, \code{\link{XLoneWay}}. 
 ##' 
 
 ##' 
@@ -137,7 +137,7 @@ saveWorkbook(wb)
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character vector of row names. Default behavior (\code{NULL}): automatically determined from data
 ##' @param ord numeric vector specifying row-index order (i.e., a re-ordering of \code{rowvar}'s levels) in the produced table. Default (\code{NULL}) is no re-ordering.
-##' @param row1,col1 numeric: the first row and column occupied by the table. In actuality, the first row will be \code{row1+2}, to allow for an optional header.
+##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param ... parameters passed on to \code{fun1$fun,fun2$fun}
 ##'

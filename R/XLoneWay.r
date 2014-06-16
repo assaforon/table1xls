@@ -1,16 +1,15 @@
 ##' One-way Contingency Tables exported to a spreadsheet
 ##'
-##' Calculates a one-way contingency table in counts and percentab, and exports a formatted output to a spreadsheet.
+##' Calculates a one-way contingency table in counts and percents, exports a formatted output to a spreadsheet, and saves the file.
 ##' 
-##' This function performs a one-way contingency table, also calculating the distribution in percentab. 
+##' This function performs a one-way contingency table, also calculating the distribution in percents. 
 ##' 
-##' The table is then exported to worksheet \code{sheet} in workbook \code{wb}, either using the format \code{"Count(percent)"} (if \code{combine=TRUE}), or as two separate columns in the same table. Worksheet writing uses \code{\link{writeWorksheet}} from the XLConnect package.
+##' The table is then exported to worksheet \code{sheet} in workbook \code{wb}, either using the format \code{"Count(percent)"} (if \code{combine=TRUE}), or as two separate columns in the same table. 
 ##' 
-##' The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist. Also, the changes are automatically saved to file.
-##' 
+##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 ##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
-##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet. See \code{\link{setStyleAction}} to control the output style. If interested in one-way summary, see \code{\link{XLunivariate}}. For two-way contingency tables, see \code{\link{XLtwoWay}}.
+##' @seealso If interested in other descriptive summaries, see \code{\link{XLunivariate}}. For two-way contingency tables, see \code{\link{XLtwoWay}}.
 ##' 
 ##' 
 ##' @example inst/examples/Ex1way.r 
@@ -23,13 +22,13 @@
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character: vector of row names. Default behavior (\code{NULL}): automatically determined from data
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
-##' @param row1,col1 numeric: the first row and column occupied by the table. 
+##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=200, 0 otherwise.
 ##' @param combine logical: should counts and percentab be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default \code{TRUE}) 
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' 
-##' @return The function returns invisibly, after writing the data into \code{sheet}.
+##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##'
 ##' @export
 
