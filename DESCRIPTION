@@ -1,10 +1,15 @@
 Package: table1xls
 Type: Package
-Title: Produces summary tables and exports them to multi-tab spreadsheet format (.xls or .xlsx)
-Version: 0.3.1
-Date: 2014-06-13
+Title: Produces summary tables and exports them to multi-tab spreadsheet format
+    (.xls or .xlsx)
+Version: 0.3.2
+Date: 2016-04-15
 Author: Assaf P. Oron
 Maintainer: Assaf P. Oron <assaf.oron@seattlechildrens.org>
-Description: A collection of convenience wrappers for producing and exporting various commonly-used numerical table types to .xls/.xlsx multi-tab spreadsheets while controlling spreadsheet position and layout, via XLConnect functionality.
+Description: A collection of convenience wrappers for producing and exporting
+    summary tables commonly used in scientific articles, to .xls/.xlsx multi-tab spreadsheets
+    while controlling spreadsheet position and layout. Powered by XLConnect/rJava utilities.
 License: GPL-3
-Imports: XLConnect
+Imports:
+    XLConnect
+RoxygenNote: 5.0.1

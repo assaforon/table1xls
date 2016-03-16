@@ -25,7 +25,7 @@
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=200, 0 otherwise.
-##' @param combine logical: should counts and percentab be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default \code{TRUE}) 
+##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default \code{TRUE}) 
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
@@ -46,7 +46,7 @@ XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord
     
   n=length(rowvar)
   tab=table(rowvar,useNA=useNA)
-  percentab=round(tab*100/n,digits=digits)
+  percentab=format(round(tab*100/n,digits=digits),nsmall=digits,trim=TRUE)
   names(tab)[is.na(names(tab))]="missing"
   tabnames=names(tab)
   tab=c(tab,n)

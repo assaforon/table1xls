@@ -59,7 +59,7 @@ loadWorkbook(path,create=TRUE)
 ##' 
 ##' @export
 
-rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(round(min(x,na.rm=na.rm),digits),'-',round(max(x,na.rm=na.rm),digits),sep=sep)
+rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(format(round(min(x,na.rm=na.rm),digits),nsmall=digits,trim=TRUE),'-',format(round(max(x,na.rm=na.rm),digits),nsmall=digits,trim=TRUE),sep=sep)
 
 ##' @rdname rangeString
 #' @export
@@ -67,23 +67,23 @@ rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(round(min(x,na.r
 iqrString<-function(x,digits=1,sep='-',quantmeth=7,na.rm=FALSE,...) 
 {
   tmp<-quantile(x,type=quantmeth,na.rm=na.rm,prob=c(1/4,3/4))
-  paste(round(tmp[1],digits),'-',round(tmp[2],digits),sep=sep)
+  paste(format(round(tmp[1],digits),nsmall=digits,trim=TRUE),'-',format(round(tmp[2],digits),nsmall=digits,trim=TRUE),sep=sep)
 }
 
 ##' @rdname rangeString
 #' @export
 
-roundmean<-function(x,digits=1,na.rm=FALSE,...) round(mean(x,na.rm=na.rm),digits=digits)
+roundmean<-function(x,digits=1,na.rm=FALSE,...) format(round(mean(x,na.rm=na.rm),digits=digits),nsmall=digits,trim=TRUE)
 
 ##' @rdname rangeString
 #' @export
 
-roundmedian<-function(x,digits=1,na.rm=FALSE,...) round(median(x,na.rm=na.rm),digits=digits)
+roundmedian<-function(x,digits=1,na.rm=FALSE,...) format(round(median(x,na.rm=na.rm),digits=digits),nsmall=digits,trim=TRUE)
 
 ##' @rdname rangeString
 #' @export
 
-roundSD<-function(x,digits=1,na.rm=FALSE,...) round(sd(x,na.rm=na.rm),digits=digits)
+roundSD<-function(x,digits=1,na.rm=FALSE,...) format(round(sd(x,na.rm=na.rm),digits=digits),nsmall=digits,trim=TRUE)
 
 ##' @rdname rangeString
 #' @export

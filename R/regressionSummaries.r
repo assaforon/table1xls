@@ -51,12 +51,12 @@ if(!is.null(title))  ### Adding a title
   row1=row1+1
 }
 
-dout=data.frame(Effect=varnames,Magnitude=round(transfun(betas),roundig))
+dout=data.frame(Effect=varnames,Magnitude=format(round(transfun(betas),roundig),nsmall=roundig,trim=TRUE))
 names(dout)[2]=effname
 CIlow=transfun(betas-SE*confac)
 CIhigh=transfun(betas+SE*confac)
-dout$Confidence=paste("(",round(CIlow,roundig),',',round(CIhigh,roundig),")",sep='')
-dout$Pvalue=round(pfun(betas/SE),pround)
+dout$Confidence=paste("(",format(round(CIlow,roundig),nsmall=roundig,trim=TRUE),',',format(round(CIhigh,roundig),nsmall=roundig,trim=TRUE),")",sep='')
+dout$Pvalue=format(round(pfun(betas/SE),pround),nsmall=pround,trim=TRUE)
 dout$Pvalue[dout$Pvalue<10^(-pround)]=paste('<',10^(-pround),sep='')
 
 writeWorksheet(wb,dout,sheet,startRow=row1,startCol=col1)

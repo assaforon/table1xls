@@ -2,10 +2,10 @@
 
 
 # This function is internal
-fancytab2<-function(x,y=NULL,digits=1,sumby=2,rowvar="",rowNames=NULL,missings='ifany')
+fancytab2<-function(x,y=NULL,digits,sumby=2,rowvar="",rowNames=NULL,missings='ifany')
 {
 tout=addmargins(table(x,y,useNA=missings))
-pout=round(200*prop.table(tout,margin=sumby),digits)
+pout=format(round(200*prop.table(tout,margin=sumby),digits),nsmall=digits,trim=TRUE)
 rownames(tout)[is.na(rownames(tout))]="missing"
 rownames(pout)[is.na(rownames(pout))]="missing"
 colnames(tout)[is.na(colnames(tout))]="missing"
@@ -52,10 +52,10 @@ return(list(Counts=tout,Percent=pout))
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added right above the tables? (default \code{FALSE}; ignored in any case if \code{percents=FALSE})
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
-##' @param digits numeric: how many digits (after the decimal point) to show in the percents table?
-##' 
+##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=200, 0 otherwise.
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' @param percents logical: would you like only a count table (\code{FALSE}), or also a percents table side-by-side with the the count table (\code{TRUE}, default)?  
+##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default: same value as \code{percents}) 
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##' @example inst/examples/Ex2way.r 
@@ -65,22 +65,20 @@ return(list(Counts=tout,Percent=pout))
 
 ##' @export
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=1,useNA='ifany',percents=TRUE)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=200,1,0),useNA='ifany',percents=TRUE,combine=percents)
 {
-
+if(length(rowvar)!=length(colvar)) stop("x:y length mismatch.\n")
 if(purge) removeSheet(wb,sheet)
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
 ### Producing counts and percents table via the internal function 'fancytab2'
 tab=fancytab2(rowvar,colvar,sumby=sumby,rowvar=rowTitle,rowNames=rowNames,digits=digits,missings=useNA)
 
-
 if(!is.null(title))  ### Adding a title
 {
   XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
   row1=row1+1
 }
-
 
 if (is.null(ord)) ord=1:dim(tab$Counts)[1]
 if (!is.null(colNames)) 
@@ -90,18 +88,28 @@ if (!is.null(colNames))
 }
 
 widt=dim(tab$Counts)[2]+1
-if(percents && header)  ### adding headers indicating 'counts' and 'percents'
+if(combine) ### combining counts and percents to a single table (default)
 {
-  XLaddText(wb,sheet,"Counts:",row1=row1,col1=col1)
-  XLaddText(wb,sheet,"Percent:",row1=row1,col1=col1+widt+1)
-  row1=row1+1
+  
+    tabout=as.data.frame(mapply(paste0,tab$Count[,-1],' (',tab$Percent[,-1],'%)'))
+    tabout=cbind(tab$Count[,1],tabout)
+    names(tabout)[1]=rowTitle
+    writeWorksheet(wb,tabout[ord,],sheet,startRow=row1,startCol=col1)
+    
+} else {
+
+    if(percents && header)  ### adding headers indicating 'counts' and 'percents'
+    {
+      XLaddText(wb,sheet,"Counts:",row1=row1,col1=col1)
+      XLaddText(wb,sheet,"Percent:",row1=row1,col1=col1+widt)
+      row1=row1+1
+    }
+    writeWorksheet(wb,tab$Counts[ord,],sheet,startRow=row1,startCol=col1)
+    if(percents) writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1,startCol=col1+widt)
 }
-writeWorksheet(wb,tab$Counts[ord,],sheet,startRow=row1,startCol=col1)
-if(percents) writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1,startCol=col1+widt+1)
 
 
-
-setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+3), width=-1)
+setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+1), width=-1)
 saveWorkbook(wb)
 
 }  ### Function end
