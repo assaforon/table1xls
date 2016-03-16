@@ -24,23 +24,23 @@ return(list(Counts=tout,Percent=pout))
 
 ##' Produces 2-way contingency tables, optionally with percentages, exports them to a spreadsheet, and saves the file.
 ##' 
-##' This function produces two identically-sized tables side by side, one with the cross-tabulated counts of unique values of \code{rowvar, colvar}
-##' and the other with percentages, calculated either by row (\code{sumby=1}, default) or column (\code{sumby=2}).
-##' Row and column margins are also automatically produced. ##' Tables are automatically saved to the file associated with the \code{wb} spreadsheet object. 
+##' This function produces two-way cross-tabulated counts of unique values of \code{rowvar, colvar},
+##' optionally with percentages, calculated either by row (\code{sumby=1}, default) or column (\code{sumby=2}).
+##' Row and column margins are also produced. ##' Tables are automatically saved to the file associated with the \code{wb} spreadsheet object. 
 ##' 
-##' There is an asymmetry between rows and columns, because the tables are converted to data frame in order for \code{\link{writeWorksheet}} to export them.
+##' There is an underlying asymmetry between rows and columns, because the tables are converted to data frame in order for \code{\link{writeWorksheet}} to export them.
 
-##' If you want to avoid the percentage tables on the side, choose \code{percents=FALSE}. If you also want no margins, just use the simpler function \code{\link{XLgeneric}}.
+##' The percents can be in parentheses in the same cells as the counts (\code{combine=TRUE}, default), in an identically-sized table on the side (\code{combine=FALSE,percents=TRUE}), or absent (\code{combine=FALSE,percents=FALSE}). If you want no margins, just use the simpler function \code{\link{XLgeneric}}.
 ##' 
 
 ##' @note The worksheet \code{sheet} does not have to pre-exist; the function will create it if it doesn't already exist.
 #' 
-##' @note If \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. Only existing data in individual cells that are part of the exported tables' target range will be overwritten. If you do want to clear an existing sheet while exporting the new tables, set \code{purge=TRUE}. This behavior, and the usage of \code{purge}, are the same across all \code{table1xls} export functions.
+##' @note By default, if \code{sheet} exists, it will be written into - rather than completely cleared and rewritten de novo. Only existing data in individual cells that are part of the exported tables' target range will be overwritten. If you do want to clear an existing sheet while exporting the new tables, set \code{purge=TRUE}. This behavior, and the usage of \code{purge}, are the same across all \code{table1xls} export functions.
 ##' 
 ##' 
 ##' @title Two-way Contingency Tables exported to a spreadsheet
 ##'
-##' @param wb a \code{\link[XLConnect]{workbook-class}} object
+##' @param wb an \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}.
 ##' @param rowvar vector: categorical variable (logical, numeric, character, factor, etc.) for the table's rows
 ##' @param colvar vector: categorical variable (logical, numeric, character factor, etc.) for the table's columns
@@ -50,12 +50,12 @@ return(list(Counts=tout,Percent=pout))
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
-##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added right above the tables? (default \code{FALSE}; ignored in any case if \code{percents=FALSE})
+##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added right above the tables? Relevant only when \code{combine=FALSE,percents=TRUE})
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=200, 0 otherwise.
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' @param percents logical: would you like only a count table (\code{FALSE}), or also a percents table side-by-side with the the count table (\code{TRUE}, default)?  
-##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default: same value as \code{percents}) 
+##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side in separate tables? (default: same value as \code{percents}) 
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##' @example inst/examples/Ex2way.r 
