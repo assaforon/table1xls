@@ -52,7 +52,7 @@ return(list(Counts=tout,Percent=pout))
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param header logical: should a header row with the captions "Counts:" and "Percentages:" be added right above the tables? Relevant only when \code{combine=FALSE,percents=TRUE})
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
-##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=200, 0 otherwise.
+##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=500, 0 otherwise.
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' @param percents logical: would you like only a count table (\code{FALSE}), or also a percents table side-by-side with the the count table (\code{TRUE}, default)?  
 ##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side in separate tables? (default: same value as \code{percents}) 
@@ -65,7 +65,7 @@ return(list(Counts=tout,Percent=pout))
 
 ##' @export
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=200,1,0),useNA='ifany',percents=TRUE,combine=percents)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents)
 {
 if(length(rowvar)!=length(colvar)) stop("x:y length mismatch.\n")
 if(purge) removeSheet(wb,sheet)

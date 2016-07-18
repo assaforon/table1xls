@@ -9,8 +9,8 @@
 \tabular{ll}{
 Package: \tab table1xls\cr
 Type: \tab Package\cr
-Version: \tab 0.3.1\cr
-Date: \tab 2014-06-13\cr
+Version: \tab 0.3.2\cr
+Date: \tab 2016-07-18\cr
 License: \tab GPL-3\cr
 }
 Any statistician collaborating with scientists, especially in the health sciences, has to produce publication-grade summary tables. Most commonly these are "Table 1" style basic demographics, contingency tables, or regression-output summaries. As a minimum, statisticians need to provide tables, from which the lead author can easily and accurately generate these tables.
@@ -29,7 +29,7 @@ You can download the latest package source code directly from GitHub, via the co
 
 The individual function help pages won't show (they are generated via \code{roxygenize}), but you can compile the package locally, or just peek into the function source code to see the help text, and use the \code{inst/examples} folder to view and run the examples.
 
-This is a new package! I will gladly accept requests for new functionalities, as well as comments and corrections on existing functions.
+I will gladly accept requests for new functionalities, as well as comments and corrections on existing functions.
 
 Thanks, Assaf
 

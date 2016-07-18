@@ -1,7 +1,3 @@
-
-### Regression summaries - multiple formats:
-
-
 book4<-XLwriteOpen("attenu.xls") 
 
 quakenames=c("Magnitude (Richter), per unit","Distance (log km), per x10")

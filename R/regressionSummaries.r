@@ -20,15 +20,15 @@
 ##' @param colid integer: vector of indices for the columns containing the point estimates and SEs, respectively. Used only if \code{betas} is a matrix.
 ##' @param transfun transformation function for \code{betas,SE}, to produce columns 2-3 of the output. Defaults to \code{\link{identity}}. use {\code{\link{exp}}} for odds ratio or relative risk.
 ##' @param effname character: a string explaining what the effect stands for, e.g. "difference" (the default), "Odds Ratio", etc.
-##' @param confac numeric: the proportionality factor for calculating confidence-intervals. Default produces 95% Normal intervals. 
+##' @param confac numeric: the proportionality factor for calculating confidence-intervals. Default produces 95\% Normal intervals. 
 ##' @param pfun function used to calculate the p-value, based on the signal-to-noise ratio \code{betas/SE}. Default assumes two-sided Normal p-values.
-
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param roundig numeric: how many digits (after the decimal point) to round the effect estimate to?
 ##' @param pround numeric: how many digits (after the decimal point) to round the p-value to? P-values rounded down to zero will show up as "<" the smallest nonzero value, e.g. with the default \code{pround=3} p-values smaller than 0.0005 will show up as "<0.001".
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 
+##' @note The default CI's are 95\% and Normal. P-values are also derived from the Normal. If you run any regression whose intervals are calculated differently (e.g., linear regression with not-huge sample size), make sure to change both \code{confac} and \code{pfun} accordingly, as is shown in the example.
 ##' @export
 
 XLregresSummary=function(wb,sheet,betas,SE=NULL,varnames=NULL,colid=1:2,transfun=identity,title=NULL,effname="Difference",confac=qnorm(0.975),roundig=2,pfun=function(x) 2*pnorm(-abs(x)),pround=3,row1=1,col1=1,purge=FALSE)

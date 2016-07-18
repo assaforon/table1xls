@@ -1,3 +1,18 @@
+Version 0.3.2 Release Notes (summer 2016) 
+==============================
+
+Bug fixes:
+
+- Added `iqrString` to the the exported functions
+
+New features:
+
+- `XLtwoWay` can now do the percents in parentheses next to counts, like `XLoneWay`; actually it's the default. You can still also do side-by-side, or drop the percents.
+- All(?) rounding is now wrapped by `format()` to make sure the actual requested number of digits is showing, rather than R/Excel's annoying "feature" of rounding it further for you in case your number happens to be roundish.
+- In `XLregresSummary`, a p-value previously rounded down to zero, will now show as "<p_0", with p_0 being the smallest positive number one could round to (default: "<0.001" because `pround=3`).
+- In `XLoneWay` and `XLtwoWay`, I bumped the default n value for switching between rounding to whole percents or leaving one decimal digit, from 200 to 500 based on experience. Of course, you can control the rounding directly via `digits`.
+
+
 Version 0.3.1 Release Notes (early summer 2014) 
 ==============================
 
