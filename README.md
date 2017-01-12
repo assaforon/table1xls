@@ -19,7 +19,6 @@ Comments welcome, to assaf.oron at seattlechildrens.org
 Wish List
 =========
 
- - Add association p-values to `XLtwoWay` 
  - perhaps also to `XLoneWay`? (vs. some hypothesis)
  - Add p-value adjustment options to p-values
  - Mega-Table-1 wrapper (different variables in same table)

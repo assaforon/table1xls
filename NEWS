@@ -9,6 +9,8 @@ New features:
 
  - In `XLregresSummary`, the CI and p-value calculations are now linked, and controlled via the `df` argument. So there are now only 2 options, Normal (default) and T (if `df` is a positive number), vs. unlimited but annoying before. Naturally, the arguments `pfun` and `confac` are now gone.
  - Introduced `niceRound', proper-rounding utility useful beyond this package
+ - `XLtwoWay' now reports Chi-squared p-values as default. User can provide another test function, or suppress the test
+ 
  - Added Yihui's "roxygenize hack" to DESCRIPTION, to enable full help files when installing from GitHub
 
 

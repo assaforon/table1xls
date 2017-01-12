@@ -56,6 +56,10 @@ return(list(Counts=tout,Percent=pout))
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' @param percents logical: would you like only a count table (\code{FALSE}), or also a percents table side-by-side with the the count table (\code{TRUE}, default)?  
 ##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side in separate tables? (default: same value as \code{percents}) 
+##' @param testname string, the *name* of a function to run a significance test on the table. Default `chisq.test`. If you want no test, set \code{testname=NULL}
+##' @param pround number of significant digits in test p-value representation. Default 3.
+##' @param testBelow logical, should test p-value be placed right below the table? Default \code{FALSE}, which places it next to the table's right edge, one row below the column headings
+##' @param ... additional arguments as needed, to pass on to \code{get(textfun)}
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##' @example inst/examples/Ex2way.r 
@@ -65,7 +69,7 @@ return(list(Counts=tout,Percent=pout))
 
 ##' @export
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents,testname='chisq.test',pround=3,testBelow=FALSE,...)
 {
 if(length(rowvar)!=length(colvar)) stop("x:y length mismatch.\n")
 if(purge) removeSheet(wb,sheet)
@@ -108,6 +112,15 @@ if(combine) ### combining counts and percents to a single table (default)
     if(percents) writeWorksheet(wb,tab$Percent[ord,],sheet,startRow=row1,startCol=col1+widt)
 }
 
+### Perform test and p-value on table
+if(!is.null(testname))
+{
+    pval=suppressWarnings(try(get(testname)(rowvar,colvar,...)$p.value))
+    ptext=paste(testname,'p:',ifelse(is.finite(pval),niceRound(pval,pround,plurb=TRUE),'Error'))
+    prow=ifelse(testBelow,row1+dim(tab$Counts)[1]+1,row1+1)
+    pcol=ifelse(testBelow,col1,col1+widt-1)
+    XLaddText(wb,sheet,ptext,row1=prow,col1=pcol)
+}
 
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+2*widt+1), width=-1)
 saveWorkbook(wb)

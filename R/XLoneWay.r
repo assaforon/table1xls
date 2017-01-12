@@ -27,12 +27,15 @@
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=500, 0 otherwise.
 ##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default \code{TRUE}) 
 ##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
-##' 
+##' @param testname string, the *name* of a function to run a significance test on the table. Default \code{NULL} (no test).
+##' @param pround number of significant digits in test p-value representation. Default 3.
+##' @param testBelow logical, should test p-value be placed right below the table? Default \code{FALSE}, which places it next to the table's right edge, one row below the column headings
+##' @param ... additional arguments as needed, to pass on to \code{get(textfun)}; for example, the reference frequencies for a Chi-Squared GoF test.
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany')
+XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,...,purge=FALSE,pround=3)
 { 
   
   if(purge) removeSheet(wb,sheet)
@@ -67,6 +70,17 @@ if(combine) {
 }
   writeWorksheet(wb,dout[ord,],sheet,startRow=row1,startCol=col1)   
 
+  ### Perform test and p-value on table
+  if(!is.null(testname))
+  {
+    pval=suppressWarnings(try(get(testname)(table(rowvar),...)$p.value))
+    ptext=paste(testname,'p:',ifelse(is.finite(pval),niceRound(pval,pround,plurb=TRUE),'Error'))
+    prow=ifelse(testBelow,row1+dim(dout)[1]+1,row1+1)
+    pcol=ifelse(testBelow,col1,col1+dim(dout)[2])
+    XLaddText(wb,sheet,ptext,row1=prow,col1=pcol)
+  }
+  
+  
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+5), width=-1)
 saveWorkbook(wb)
 }  ### Function end
