@@ -2,10 +2,12 @@ Package: table1xls
 Type: Package
 Title: Produces Summary Tables and Exports Them to Multi-Tab Spreadsheet Format
     (.xls or .xlsx)
-Version: 0.3.2
-Date: 2016-07-18
+Version: 0.4.0
+Date: 2017-01-xx
 Author: Assaf P. Oron
 Maintainer: Assaf P. Oron <assaf.oron@seattlechildrens.org>
+Authors@R: if (file.exists('DESCRIPTION') && !file.exists('man/XLoneWay.Rd')) roxygen2::roxygenize('.');
+    person('Assaf P.','Oron', role=c('cre','aut'), email='assaf.oron@seattlechildrens.org')
 Description: A collection of time-saving wrappers for producing and exporting
     summary tables commonly used in scientific articles, to .xls/.xlsx multi-tab spreadsheets, while controlling spreadsheet layout. Powered by 'XLConnect'/'rJava' utilities.
 License: GPL-3

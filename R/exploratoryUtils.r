@@ -5,7 +5,7 @@
 fancytab2<-function(x,y=NULL,digits,sumby=2,rowvar="",rowNames=NULL,missings='ifany')
 {
 tout=addmargins(table(x,y,useNA=missings))
-pout=format(round(200*prop.table(tout,margin=sumby),digits),nsmall=digits,trim=TRUE)
+pout=niceRound(200*prop.table(tout,margin=sumby),digits)
 rownames(tout)[is.na(rownames(tout))]="missing"
 rownames(pout)[is.na(rownames(pout))]="missing"
 colnames(tout)[is.na(colnames(tout))]="missing"

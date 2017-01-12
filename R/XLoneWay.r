@@ -46,12 +46,12 @@ XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord
     
   n=length(rowvar)
   tab=table(rowvar,useNA=useNA)
-  percentab=format(round(tab*100/n,digits=digits),nsmall=digits,trim=TRUE)
+  percentab=niceRound(tab*100/n,digits=digits)
   names(tab)[is.na(names(tab))]="missing"
   tabnames=names(tab)
   tab=c(tab,n)
   names(tab)=c(tabnames,"Total")
-  percentab=c(percentab,100)
+  percentab=c(percentab,niceRound(100,digits))
   if (is.null(ord)) ord=1:length(tab)
   if (!is.null(rowNames)) names(tab)=rowNames
 

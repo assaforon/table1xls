@@ -11,7 +11,7 @@
 ##' 
 ##' This short utility mitigates the risk, by calling \code{\link{unlink}} first to make sure existing copies are deleted before the new spreadsheet file is opened.
 ##' 
-##' @note Even though the workbook object is created, and is linked to a specific file name, it will only be saved to disk after \code{\link{saveWorkbook}} is called. See example. From version 0.3.0 on, \code{table1xls} export functions all save the file by default. The example also illustrates some of the peculiarities of working with \code{\link{XLConnect}}, many of which are taken care of when using \code{table1xls} functions.
+##' @note Even though the workbook object is created, and is linked to a specific file name, it will only be saved to disk after \code{\link{saveWorkbook}} is called. See example. From \code{table1xls} version 0.3.0 on, all of the package's spreadsheet-export functions save the file by default. The example also illustrates some of the peculiarities of working with \code{\link{XLConnect}}, many of which are taken care of when using \code{table1xls} functions.
 ##' 
 ##' @param path character: the spreadsheet's full filename, including the extension. Only \code{.xls, .xlsx} extensions are allowed.
 ##' 
@@ -59,7 +59,7 @@ loadWorkbook(path,create=TRUE)
 ##' 
 ##' @export
 
-rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(format(round(min(x,na.rm=na.rm),digits),nsmall=digits,trim=TRUE),'-',format(round(max(x,na.rm=na.rm),digits),nsmall=digits,trim=TRUE),sep=sep)
+rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(niceRound(min(x,na.rm=na.rm),digits),'-',niceRound(max(x,na.rm=na.rm),digits),sep=sep)
 
 ##' @rdname rangeString
 #' @export
@@ -67,23 +67,23 @@ rangeString<-function(x,digits=1,sep='-',na.rm=FALSE,...) paste(format(round(min
 iqrString<-function(x,digits=1,sep='-',quantmeth=7,na.rm=FALSE,...) 
 {
   tmp<-quantile(x,type=quantmeth,na.rm=na.rm,prob=c(1/4,3/4))
-  paste(format(round(tmp[1],digits),nsmall=digits,trim=TRUE),'-',format(round(tmp[2],digits),nsmall=digits,trim=TRUE),sep=sep)
+  paste(niceRound(tmp[1],digits),'-',niceRound(tmp[2],digits),sep=sep)
 }
 
 ##' @rdname rangeString
 #' @export
 
-roundmean<-function(x,digits=1,na.rm=FALSE,...) format(round(mean(x,na.rm=na.rm),digits=digits),nsmall=digits,trim=TRUE)
+roundmean<-function(x,digits=1,na.rm=FALSE,...) niceRound(mean(x,na.rm=na.rm),digits=digits)
 
 ##' @rdname rangeString
 #' @export
 
-roundmedian<-function(x,digits=1,na.rm=FALSE,...) format(round(median(x,na.rm=na.rm),digits=digits),nsmall=digits,trim=TRUE)
+roundmedian<-function(x,digits=1,na.rm=FALSE,...) niceRound(median(x,na.rm=na.rm),digits=digits)
 
 ##' @rdname rangeString
 #' @export
 
-roundSD<-function(x,digits=1,na.rm=FALSE,...) format(round(sd(x,na.rm=na.rm),digits=digits),nsmall=digits,trim=TRUE)
+roundSD<-function(x,digits=1,na.rm=FALSE,...) niceRound(sd(x,na.rm=na.rm),digits=digits)
 
 ##' @rdname rangeString
 #' @export
@@ -126,6 +126,35 @@ setColumnWidth(wb, sheet = sheet, column = col1, width=-1)
   saveWorkbook(wb)
 }
 
+
 # Inactive:
 # @param wrap logical: should text be wrapped keeping its width as is  - or should column width auto-matched to fit text on one line? (default \code{FALSE})
+
+######################################
+
+##' Rounding to a Predictable Number of Digits
+##' 
+##'   
+##' Rounds numbers to always have the specified number of decimal digits, rather than R's "greedy" most-compact rounding convention. Includes optional "<0.0..." override adequate for representing small p-values.
+##' 
+##' 
+##' R's standard \code{\link{round}} utility rounds to at *most* the number of digits specified. When the number happens to round more "compactly", it rounds to fewer digits. Thus, for example, `round(4.03,digits=2)` yields 4 as an answer. This is undesirable when trying to format a table, e.g., for publication.
+##' 
+##' \code{niceRound} solves this problem by wrapping a \code{\link{format}} call around the \code{\link{round}} call. The result will always have `digits` decimal digits. In addition, since reporting p-values always involves rounding, if the argument `plurb` is \code{TRUE}, then values below the rounding thresholds will be represented using the "less than" convention. For example, with \code{digits=3} and \code{plurb=TRUE}, the number 0.0004 will be represented as \code{<0.001}.
+##' 
+##' 
+##' @param numbers the numbers to be rounded. Can also be a vector or numeric array.
+##' @param digits the desired number of decimal digits
+##' @param plurb logical, should the p-value-style "less-than blurb" convention be used? Default \code{FALSE}.
+##' @export
+##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @seealso \code{\link{round}},\code{\link{format}}
+##' 
+niceRound<-function(numbers,digits=0,plurb=FALSE)
+{
+if(digits<0) stop('cannot round to negative number of digits.\n')
+cand=format(round(numbers,digits=digits),nsmall=digits,trim=TRUE) 
+if(plurb) cand[numbers<0.5/(10^digits-1)]=paste('<',10^(-digits),sep='')
+cand
+}
 

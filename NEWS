@@ -1,3 +1,17 @@
+Version 0.4.0 Release Notes (winter/spring 2017) 
+==============================
+
+Bumped first decimal, because stuff.
+
+Bug fixes:
+
+New features:
+
+ - In `XLregresSummary`, the CI and p-value calculations are now linked, and controlled via the `df` argument. So there are now only 2 options, Normal (default) and T (if `df` is a positive number), vs. unlimited but annoying before. Naturally, the arguments `pfun` and `confac` are now gone.
+ - Introduced `niceRound', proper-rounding utility useful beyond this package
+ - Added Yihui's "roxygenize hack" to DESCRIPTION, to enable full help files when installing from GitHub
+
+
 Version 0.3.2 Release Notes (summer 2016) 
 ==============================
 

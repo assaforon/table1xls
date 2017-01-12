@@ -20,9 +20,9 @@
 ##' @param colid integer: vector of indices for the columns containing the point estimates and SEs, respectively. Used only if \code{betas} is a matrix.
 ##' @param transfun transformation function for \code{betas,SE}, to produce columns 2-3 of the output. Defaults to \code{\link{identity}}. use {\code{\link{exp}}} for odds ratio or relative risk.
 ##' @param effname character: a string explaining what the effect stands for, e.g. "difference" (the default), "Odds Ratio", etc.
-##' @param confac numeric: the proportionality factor for calculating confidence-intervals. Default produces 95\% Normal intervals. 
-##' @param pfun function used to calculate the p-value, based on the signal-to-noise ratio \code{betas/SE}. Default assumes two-sided Normal p-values.
-##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
+##' @param alpha numeric, Type I error for CIs. Default 0.05 for 95\% CIs.
+##' @param df numeric, residual degrees of freedom. If a finite value is provided, t-distribution p-value and CIs will be calculated; otherwise Normality is assumed. Default \code{NA}.
+##' ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param roundig numeric: how many digits (after the decimal point) to round the effect estimate to?
 ##' @param pround numeric: how many digits (after the decimal point) to round the p-value to? P-values rounded down to zero will show up as "<" the smallest nonzero value, e.g. with the default \code{pround=3} p-values smaller than 0.0005 will show up as "<0.001".
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
@@ -31,12 +31,13 @@
 ##' @note The default CI's are 95\% and Normal. P-values are also derived from the Normal. If you run any regression whose intervals are calculated differently (e.g., linear regression with not-huge sample size), make sure to change both \code{confac} and \code{pfun} accordingly, as is shown in the example.
 ##' @export
 
-XLregresSummary=function(wb,sheet,betas,SE=NULL,varnames=NULL,colid=1:2,transfun=identity,title=NULL,effname="Difference",confac=qnorm(0.975),roundig=2,pfun=function(x) 2*pnorm(-abs(x)),pround=3,row1=1,col1=1,purge=FALSE)
+XLregresSummary=function(wb,sheet,betas,SE=NULL,varnames=NULL,colid=1:2,transfun=identity,title=NULL,effname="Difference",alpha=0.05,df=NA,roundig=2,pround=3,row1=1,col1=1,purge=FALSE)
 {	
    
 if(purge) removeSheet(wb,sheet)
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
+## Matrix input convenience feature
 if(is.matrix(betas))
 {
   if(is.null(varnames)) varnames=rownames(betas)
@@ -45,6 +46,18 @@ if(is.matrix(betas))
 }
 if(length(varnames)!=length(betas) | length(varnames)!=length(SE)) stop("Mismatched lengths.\n")
 
+## CIs and p-values
+#  Default is Normal:
+confac=qnorm(1-alpha/2)
+pfun=function(x) 2*pnorm(-abs(x))
+
+# If finite df are specified, then t(df) replaces them:
+if(is.finite(df) && df>0) 
+{
+  confac=qt(1-alpha/2,df=df)
+  pfun=function(x) 2*pt(-abs(x),df=df)
+}
+  
 if(!is.null(title))  ### Adding a title
 {
   XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
@@ -55,9 +68,9 @@ dout=data.frame(Effect=varnames,Magnitude=format(round(transfun(betas),roundig),
 names(dout)[2]=effname
 CIlow=transfun(betas-SE*confac)
 CIhigh=transfun(betas+SE*confac)
-dout$Confidence=paste("(",format(round(CIlow,roundig),nsmall=roundig,trim=TRUE),',',format(round(CIhigh,roundig),nsmall=roundig,trim=TRUE),")",sep='')
-dout$Pvalue=format(round(pfun(betas/SE),pround),nsmall=pround,trim=TRUE)
-dout$Pvalue[dout$Pvalue<10^(-pround)]=paste('<',10^(-pround),sep='')
+dout$CI=paste("(",niceRound(CIlow,roundig),',',niceRound(CIhigh,roundig),")",sep='')
+names(dout)=gsub('CI',paste('CI',100*(1-alpha),sep=''),names(dout))
+dout$Pvalue=niceRound(pfun(betas/SE),digits=pround,plurb=TRUE)
 
 writeWorksheet(wb,dout,sheet,startRow=row1,startCol=col1)
 

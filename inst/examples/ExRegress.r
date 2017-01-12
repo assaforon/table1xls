@@ -7,11 +7,17 @@ quakemod1=summary(lm(log10(accel)~mag+log10(dist),data=attenu))
 
 
 ## Model-scale summaries; we don't care for the intercept.
+# First (wrongly) using Normal distribution for inference/CIs
 
 XLregresSummary(book4,"ModelScale",varnames=quakenames,
                 betas=quakemod1$coef[-1,1],SE=quakemod1$coef[-1,2],
-                ,title="Log-Ground Acceleration Effects",
-                confac=qt(0.975,179),pfun=function(x) 2*pt(-abs(x),df=179))
+                ,title="Log-Ground Acceleration Effects, Normal CIs")
+
+# Now using t-distribution as befits linear regression
+
+XLregresSummary(book4,"ModelScale",varnames=quakenames,
+                betas=quakemod1$coef[-1,1],SE=quakemod1$coef[-1,2],
+                ,title="Log-Ground Acceleration Effects",df=quakemod1$df[2],col1=6)
 
 ## Same thing, but using matrix input; no need to provide SE and names. 
 ## It is arguably still nicer to provide your own names - but could be a reproducibility risk. 
@@ -19,7 +25,7 @@ XLregresSummary(book4,"ModelScale",varnames=quakenames,
 
 XLregresSummary(book4,"ModelScale",betas=quakemod1$coef[-1,],
                 pround=6,title="Log-Ground Acceleration Effects",
-                confac=qt(0.975,179),pfun=function(x) 2*pt(-abs(x),df=179),row1=8)
+                ,df=quakemod1$df[2],row1=8)
 
 ## Effects are arguably more meaningful as percent change. 
 ## So... still same model, but different summaries. 
@@ -29,7 +35,7 @@ XLregresSummary(book4,"PercentChange",varnames=quakenames,
                 betas=quakemod1$coef[-1,],
                 roundig=1,pround=6,title="Relative Ground Acceleration Effects",
                 transfun=function(x) 100*(10^x-1),
-                effname="Percent Change",confac=qt(0.975,179),pfun=function(x) 2*pt(-abs(x),df=179))
+                effname="Percent Change",df=quakemod1$df[2])
 
 cat("Look for",paste(getwd(),"attenu.xls",sep='/'),"to see the results!\n")
 
@@ -44,6 +50,5 @@ cat("Look for",paste(getwd(),"attenu.xls",sep='/'),"to see the results!\n")
 # SE=sqrt(diag(vcov(quakemod2)))[-1],
 # roundig=1,pround=6,
 # title="Relative Ground Acceleration Effects",
-# transfun=function(x) 100*(10^x-1),effname="Percent Change",
-# confac=qt(0.975,160),pfun=function(x) 2*pt(-abs(x),df=160))
+# transfun=function(x) 100*(10^x-1),effname="Percent Change",df=160)
 
