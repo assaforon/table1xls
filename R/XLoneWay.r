@@ -71,7 +71,7 @@ if(combine) {
   writeWorksheet(wb,dout[ord,],sheet,startRow=row1,startCol=col1)   
 
   ### Perform test and p-value on table
-  if(!is.null(testname))
+  if(!is.null(testname) && length(unique(rowvar))>1)
   {
     pval=suppressWarnings(try(get(testname)(table(rowvar),...)$p.value))
     ptext=paste(testname,'p:',ifelse(is.finite(pval),niceRound(pval,pround,plurb=TRUE),'Error'))

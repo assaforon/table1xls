@@ -113,7 +113,7 @@ if(combine) ### combining counts and percents to a single table (default)
 }
 
 ### Perform test and p-value on table
-if(!is.null(testname))
+if(!is.null(testname) && length(unique(rowvar))>1 && length(unique(colvar))>1 )
 {
     pval=suppressWarnings(try(get(testname)(rowvar,colvar,...)$p.value))
     ptext=paste(testname,'p:',ifelse(is.finite(pval),niceRound(pval,pround,plurb=TRUE),'Error'))
