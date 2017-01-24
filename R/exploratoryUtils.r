@@ -2,10 +2,16 @@
 
 
 # This function is internal
-fancytab2<-function(x,y=NULL,digits,sumby=2,rowvar="",rowNames=NULL,missings='ifany')
+fancytab2<-function(x,y=NULL,digits,sumby=2,rowvar="",rowNames=NULL,missings='ifany',totals=TRUE)
 {
-tout=addmargins(table(x,y,useNA=missings))
-pout=niceRound(200*prop.table(tout,margin=sumby),digits)
+tout=table(x,y,useNA=missings)
+pout=niceRound(100*prop.table(tout,margin=sumby),digits)
+
+if(totals)
+{
+  tout=addmargins(tout)
+  pout=niceRound(200*prop.table(tout,margin=sumby),digits)
+}
 rownames(tout)[is.na(rownames(tout))]="missing"
 rownames(pout)[is.na(rownames(pout))]="missing"
 colnames(tout)[is.na(colnames(tout))]="missing"
@@ -69,14 +75,14 @@ return(list(Counts=tout,Percent=pout))
 
 ##' @export
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents,testname='chisq.test',pround=3,testBelow=FALSE,...)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents,testname='chisq.test',pround=3,testBelow=FALSE,totals=TRUE,...)
 {
 if(length(rowvar)!=length(colvar)) stop("x:y length mismatch.\n")
 if(purge) removeSheet(wb,sheet)
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
 ### Producing counts and percents table via the internal function 'fancytab2'
-tab=fancytab2(rowvar,colvar,sumby=sumby,rowvar=rowTitle,rowNames=rowNames,digits=digits,missings=useNA)
+tab=fancytab2(rowvar,colvar,sumby=sumby,rowvar=rowTitle,rowNames=rowNames,digits=digits,missings=useNA,totals=totals)
 
 if(!is.null(title))  ### Adding a title
 {
@@ -164,13 +170,13 @@ saveWorkbook(wb)
 ##'
 ##' @export
 
-XLunivariate<-function(wb,sheet,calcvar,rowvar=rep("All",length(calcvar)),fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),title=NULL,rowTitle="",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,...)
+XLunivariate<-function(wb,sheet,calcvar,byvar=rep("All",length(calcvar)),fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),title=NULL,rowTitle="",rowNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,...)
 { 
 if(purge) removeSheet(wb,sheet)  
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
-num1=tapply(calcvar,rowvar,fun1$fun,...)
-num2=tapply(calcvar,rowvar,fun2$fun,...)
+num1=tapply(calcvar,byvar,fun1$fun,...)
+num2=tapply(calcvar,byvar,fun2$fun,...)
 if (is.null(ord)) ord=1:length(num1)
 if (is.null(rowNames)) rowNames=names(num1)
 

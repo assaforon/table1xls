@@ -1,15 +1,14 @@
-##' One-way Contingency Tables exported to a spreadsheet
+##' "Table 1" Style List of Tables exported to a spreadsheet
 ##'
-##' Calculates a one-way contingency table in counts and percents, exports a formatted output to a spreadsheet, and saves the file.
+##' Formats and exports a series of shared-structure tables, and saves the file.
 ##' 
-##' This function performs a one-way contingency table, also calculating the distribution in percents. 
 ##' 
-##' The table is then exported to worksheet \code{sheet} in workbook \code{wb}, either using the format \code{"Count(percent)"} (if \code{combine=TRUE}), or as two separate columns in the same table. 
+##' Details forthcoming... 
 ##' 
 ##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 ##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
-##' @seealso If interested in other descriptive summaries, see \code{\link{XLunivariate}}. For two-way contingency tables, see \code{\link{XLtwoWay}}.
+##' @seealso \code{\link{XLoneWay}}.
 ##' 
 ##' 
 ##' @example inst/examples/Ex1way.r 
@@ -17,7 +16,9 @@
 ##' 
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
-##' @param rowvar vector: the categorical variable (logical, numeric, character, factor, etc.) to be tabulated
+##' @param DF a rectangular array with all variables to be tabulated
+##' @param colvar When \code{fun=\link{XLtwoWay}}, this specifies the column variable to cross-tabulate vs. the variables in \code{DF}.
+##' @param fun The \code{table1xls} function to apply for each variable. Default \code{\link{XLoneWay}}.
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character: vector of row names. Default behavior (\code{NULL}): automatically determined from data
@@ -35,9 +36,19 @@
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,totals=TRUE,...,purge=FALSE,pround=3)
+XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,title="Table 1",rowTitle="Variable",row1=1,col1=1,digits=ifelse(dim(DF)[1]>=500,1,0),...,purge=FALSE)
 { 
-  
+  dims=dim(DF)
+  if(length(dims)!=2) stop("Input must be rectangular array/DF.\n")
+  if(!is.null(colvar)) fun<-XLtwoWay
+  if(is.null(colvar) && identical(fun,XLtwoWay))
+  {
+    warning("No column variable specified; assuming last column is it.\n")
+    colvar=DF[,dims[2]]
+    DF=DF[-dims[2]]
+    dims=dim(DF)
+  }
+  DF=as.data.frame(DF)
   if(purge) removeSheet(wb,sheet)
   if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
   
@@ -46,44 +57,30 @@ XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord
     XLaddText(wb,sheet,text=title,row1=row1,col1=col1)
     row1=row1+1
   }
-    
-  n=length(rowvar)
-  tab=table(rowvar,useNA=useNA)
-  percentab=niceRound(tab*100/n,digits=digits)
-  names(tab)[is.na(names(tab))]="missing"
-  tabnames=names(tab)
-  if(totals)
-  {
-    tab=c(tab,n)
-    names(tab)=c(tabnames,"Total")
-    percentab=c(percentab,niceRound(100,digits))
-  }
-  if (is.null(ord)) ord=1:length(tab)
-  if (!is.null(rowNames)) names(tab)=rowNames
+n=dims[1]
+nvar=dims[2]
 
-if(combine) {
-    
-    dout=data.frame(cbind(names(tab),paste(tab,' (',percentab,'%)',sep="")))
-    names(dout)=c(rowTitle,"Count (%)")
-    
-} else {
-
-  dout=data.frame(nam=names(tab),Count=tab,Percent=percentab)
-  names(dout)[1]=rowTitle
+## Tabulating the variables
+for(a in 1:nvar)
+{
+  fun(wb,sheet,DF[,a],colvar=colvar,row1=row1,col1=col1,rowTitle=names(DF)[a],totals=FALSE,digits=digits,...)
+  if(a>1) for (b in 1:(1+length(unique(colvar)))) XLaddText(wb,sheet,text="",row1=row1,col1=col1+b)
+  row1=row1+ifelse(identical(fun,XLunivariate),length(rowvar),length(unique(DF[,a]))+2
 }
-  writeWorksheet(wb,dout[ord,],sheet,startRow=row1,startCol=col1)   
+## Bottom summaries
+if(identical(fun,XLoneWay))
+{
+  XLaddText(wb,sheet,"Sample Size (n)",row1=row1,col1=col1)
+  XLaddText(wb,sheet,paste(n," (",niceRound(100,digits),"%)",sep=''),row1=row1,col1=col1+1)
+}
+if(identical(fun,XLtwoWay))
+{
+  XLaddText(wb,sheet,paste("Sample Sizes (total ",n,")",sep=''),row1=row1,col1=col1)
+  enns=table(colvar,...)
+  npct=paste(enns," (",niceRound(100*enns/n,digits),"%)",sep='')
+  for (b in 1:(1+length(unique(colvar)))) XLaddText(wb,sheet,npct[b],row1=row1,col1=col1+b)
+}
 
-  ### Perform test and p-value on table
-  if(!is.null(testname) && length(unique(rowvar))>1)
-  {
-    pval=suppressWarnings(try(get(testname)(table(rowvar),...)$p.value))
-    ptext=paste(testname,'p:',ifelse(is.finite(pval),niceRound(pval,pround,plurb=TRUE),'Error'))
-    prow=ifelse(testBelow,row1+dim(dout)[1]+1,row1+1)
-    pcol=ifelse(testBelow,col1,col1+dim(dout)[2])
-    XLaddText(wb,sheet,ptext,row1=prow,col1=pcol)
-  }
-  
-  
 setColumnWidth(wb, sheet = sheet, column = col1:(col1+5), width=-1)
 saveWorkbook(wb)
 }  ### Function end
