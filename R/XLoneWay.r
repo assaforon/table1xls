@@ -35,7 +35,7 @@
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,totals=TRUE,...,purge=FALSE,pround=3)
+XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,margins=TRUE,...,purge=FALSE,pround=3,sideBySide=FALSE)
 { 
   
   if(purge) removeSheet(wb,sheet)
@@ -52,7 +52,7 @@ XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,ord
   percentab=niceRound(tab*100/n,digits=digits)
   names(tab)[is.na(names(tab))]="missing"
   tabnames=names(tab)
-  if(totals)
+  if(margins)
   {
     tab=c(tab,n)
     names(tab)=c(tabnames,"Total")

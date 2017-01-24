@@ -7,11 +7,13 @@ Bug fixes:
 
 New features:
 
+ - New function `XLtable1' exports a manuscript-Table-1-like series of descriptive tables with common structure.
+ - This function required some useful changes in "atomic" package functions: `XLoneWay,XLtwoWay' now allow `margins=FALSE' 
  - In `XLregresSummary`, the CI and p-value calculations are now linked, and controlled via the `df` argument. So there are now only 2 options, Normal (default) and T (if `df` is a positive number), vs. unlimited but annoying before. Naturally, the arguments `pfun` and `confac` are now gone.
- - Introduced `niceRound', proper-rounding utility useful beyond this package
- - `XLtwoWay' now reports Chi-squared p-values as default. User can provide another test function, or suppress the test
- - Similarly for `XLoneWay`, except here the default is no test, b/c wanting to p-value a one-way table is far less common
- - Added Yihui's "roxygenize hack" to DESCRIPTION, to enable full help files when installing from GitHub
+ - Introduced `niceRound', a proper-rounding utility useful beyond this package.
+ - `XLtwoWay' now reports Chi-squared p-values as default. User can provide another test function, or suppress the test.
+ - Similarly for `XLoneWay`, except here the default is no test, b/c wanting to p-value a one-way table is far less common.
+ - Added Yihui's "roxygenize hack" to DESCRIPTION, to enable full help files when installing from GitHub.
 
 
 Version 0.3.2 Release Notes (summer 2016) 

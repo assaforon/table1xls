@@ -1,6 +1,7 @@
 exportPattern("XL")
 exportPattern("round")
 export(emptee)
+export(niceRound)
 exportPattern("String")
 import(XLConnect)
 import(stats)
