@@ -75,9 +75,10 @@ return(list(Counts=tout,Percent=pout))
 
 ##' @export
 
-XLtwoWay<-function(wb,sheet,rowvar,colvar,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents,testname='chisq.test',pround=3,testBelow=FALSE,margins=TRUE,sideBySide=FALSE,...)
+XLtwoWay<-function(wb,sheet,rowvar,colvar,table1mode=FALSE,sumby=1,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,title=NULL,header=FALSE,purge=FALSE,digits=ifelse(length(rowvar)>=500,1,0),useNA='ifany',percents=TRUE,combine=percents,testname='chisq.test',pround=3,testBelow=FALSE,margins=TRUE,sideBySide=FALSE,...)
 {
 if(length(rowvar)!=length(colvar)) stop("x:y length mismatch.\n")
+if(table1mode) margins<-FALSE
 if(purge) removeSheet(wb,sheet)
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
@@ -170,25 +171,34 @@ saveWorkbook(wb)
 ##'
 ##' @export
 
-XLunivariate<-function(wb,sheet,calcvar,byvar=rep("",length(calcvar)),fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),sideBySide=FALSE,title=NULL,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,...)
+XLunivariate<-function(wb,sheet,calcvar,colvar=rep("",length(calcvar)),table1mode=FALSE,fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),sideBySide=FALSE,title=NULL,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,...)
 { 
+if(table1mode) 
+{
+  if(length(unique(colvar))>1) sideBySide<-TRUE
+  if(is.null(colvar)) colvar=rep("",length(calcvar))
+  rowNames=rowTitle
+  rowTitle=""
+}  
 if(purge) removeSheet(wb,sheet)  
 if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 
-num1=tapply(calcvar,byvar,fun1$fun,...)
-num2=tapply(calcvar,byvar,fun2$fun,...)
+num1=tapply(calcvar,colvar,fun1$fun,...)
+num2=tapply(calcvar,colvar,fun2$fun,...)
 if (is.null(ord)) ord=1:length(num1)
 if (is.null(rowNames)) rowNames=names(num1)
 
+statname=paste(seps[1],fun1$name,seps[2],fun2$name,seps[3],sep='')
 if(sideBySide)
 {
-  outdat=data.frame(paste(seps[1],fun1$name,seps[2],fun2$name,seps[3],sep='')) 
+  outdat=data.frame(statname)
+  if(table1mode) {rowTitle=statname;outdat[1]=rowNames}
   for (a in ord) outdat=cbind(outdat,paste(seps[1],num1[a],seps[2],num2[a],seps[3],sep=''))
-  names(outdat)=c(rowTitle,rowNames[ord])
+  names(outdat)=c(rowTitle,names(num1)[ord])
   ord=1
 } else {
   outdat=data.frame(cbind(rowNames,paste(seps[1],num1,seps[2],num2,seps[3],sep='')))
-  names(outdat)=c(rowTitle,paste(seps[1],fun1$name,seps[2],fun2$name,seps[3],sep=''))
+  names(outdat)=c(rowTitle,statname)
 }
 
 if(!is.null(title))  ### Adding a title

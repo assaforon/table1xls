@@ -35,9 +35,9 @@
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,title=NULL,rowTitle="Value",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,margins=TRUE,...,purge=FALSE,pround=3,sideBySide=FALSE)
+XLoneWay<-function(wb,sheet,rowvar,table1mode=FALSE,title=NULL,rowTitle="Value",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,margins=TRUE,...,purge=FALSE,pround=3,sideBySide=FALSE)
 { 
-  
+  if(table1mode) margins<-FALSE  
   if(purge) removeSheet(wb,sheet)
   if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
   

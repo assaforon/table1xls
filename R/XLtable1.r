@@ -36,16 +36,24 @@
 ##'
 ##' @export
 
-XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,sideBySide=FALSE,title="Table 1",rowTitle="Variable",colNames=NULL,row1=1,col1=1,digits=ifelse(dim(DF)[1]>=500,1,0),...,purge=FALSE)
+XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,sideBySide=FALSE,title="Table 1",rowTitle="Variable",colNames=NULL,row1=1,col1=1,digits=NULL,...,purge=FALSE)
 { 
   dims=dim(DF)
   if(length(dims)!=2) stop("Input must be rectangular array/DF.\n")
-  if(!is.null(colvar)) fun<-XLtwoWay
+  if(!is.null(colvar) )
+  {
+    if(length(colvar)!=dims[1]) stop("Column variable length mismatch.\n")
+    if(!identical(fun,XLunivariate)) fun<-XLtwoWay
+  }
   if(is.null(colvar) && identical(fun,XLtwoWay)) {
     warning("No column variable specified; assuming last column is it.\n")
     colvar=DF[,dims[2]]
     DF=DF[-dims[2]]
     dims=dim(DF)
+  }
+  if(is.null(digits)) {
+    digits=ifelse(dim(DF)[1]>=500,1,0)
+    if(identical(fun,XLunivariate)) digits=1
   }
   DF=as.data.frame(DF)
   if(purge) removeSheet(wb,sheet)
@@ -62,9 +70,14 @@ nvar=dims[2]
 ## Tabulating the variables
 for(a in 1:nvar)
 {
-  fun(wb,sheet,DF[,a],colvar=colvar,row1=row1,col1=col1,rowTitle=names(DF)[a],colNames=colNames,margins=FALSE,digits=digits,...)
-  if(a>1) for (b in 1:(1+length(unique(colvar)))) XLaddText(wb,sheet,text="",row1=row1,col1=col1+b)
-  row1=row1+ifelse(identical(fun,XLunivariate),length(rowvar),length(unique(DF[,a])))+2
+  fun(wb,sheet,DF[,a],colvar=colvar,table1mode=TRUE,row1=row1,col1=col1,rowTitle=names(DF)[a],colNames=colNames,digits=digits,...)
+
+  ## Removing some fluff output
+  if(a>1) 
+  {
+    clearRange(wb,sheet,c(row1,ifelse(identical(fun,XLunivariate),col1,col1+1),row1,col1+1+length(unique(colvar))))
+   }
+  row1=row1+ifelse(identical(fun,XLunivariate),2,length(unique(DF[,a]))+2)
 }
 ## Bottom summaries
 if(identical(fun,XLoneWay))
