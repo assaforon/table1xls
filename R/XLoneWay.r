@@ -17,7 +17,8 @@
 ##' 
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
-##' @param rowvar vector: the categorical variable (logical, numeric, character, factor, etc.) to be tabulated
+##' @param rowvar vector: the categorical variable (logical, numeric, character, factor, etc.) to be tabulated.
+##' @param table1mode logical: is the function called from \code{\link{XLtable1}}? If \code{TRUE}, some modifications will be made to the output. Default \code{FALSE}.
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character: vector of row names. Default behavior (\code{NULL}): automatically determined from data
@@ -30,12 +31,13 @@
 ##' @param testname string, the *name* of a function to run a significance test on the table. Default \code{NULL} (no test).
 ##' @param pround number of significant digits in test p-value representation. Default 3.
 ##' @param testBelow logical, should test p-value be placed right below the table? Default \code{FALSE}, which places it next to the table's right edge, one row below the column headings
+##' @param margins logical: should margins with totals be returned? Default \code{TRUE}.
 ##' @param ... additional arguments as needed, to pass on to \code{get(textfun)}; for example, the reference frequencies for a Chi-Squared GoF test.
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##'
 ##' @export
 
-XLoneWay<-function(wb,sheet,rowvar,table1mode=FALSE,title=NULL,rowTitle="Value",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,margins=TRUE,...,purge=FALSE,pround=3,sideBySide=FALSE)
+XLoneWay<-function(wb,sheet,rowvar,table1mode=FALSE,title=NULL,rowTitle="Value",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,digits=ifelse(length(rowvar)>=500,1,0),combine=TRUE,useNA='ifany',testname=NULL,testBelow=FALSE,margins=TRUE,...,purge=FALSE,pround=3)
 { 
   if(table1mode) margins<-FALSE  
   if(purge) removeSheet(wb,sheet)
