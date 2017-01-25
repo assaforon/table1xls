@@ -8,30 +8,24 @@
 ##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 ##' 
 ##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
-##' @seealso \code{\link{XLoneWay}}.
+##' @seealso \code{\link{XLoneWay}},\code{\link{XLtwoWay}},\code{\link{XLunivariate}}.
 ##' 
 ##' 
-##' @example inst/examples/Ex1way.r 
+##' @example inst/examples/ 
 ##' 
 ##' 
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
 ##' @param sheet numeric or character: a worksheet name (character) or position (numeric) within \code{wb}. 
-##' @param DF a rectangular array with all variables to be tabulated
-##' @param colvar When \code{fun=\link{XLtwoWay}}, this specifies the column variable to cross-tabulate vs. the variables in \code{DF}.
-##' @param fun The \code{table1xls} function to apply for each variable. Default \code{\link{XLoneWay}}.
-##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
+##' @param DF a rectangular array with all variables to be tabulated.
+##' @param colvar vector; specifies the variable to cross-tabulate for \code{fun=\link{XLtwoWay}} (see 'Details' for convenience options), or to stratify for \code{\link{XLunivariate}}. Has to be the entire variable, rather than just a name.
+##' @param fun The \code{table1xls} function to apply for each variable. Default \code{\link{XLoneWay}}. Other supported functions are \code{\link{XLtwoWay},\link{XLunivariate}}.
+##' @param title character: an optional overall title to the table. Default \code{"Table 1"}.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
-##' @param rowNames character: vector of row names. Default behavior (\code{NULL}): automatically determined from data
-##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
+##' @param colName character: when relevant, more descriptive names for columns in case \code{colvar} is used. Default \code{NULL}, which will use the unique values of \code{colvar} as names. 
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
-##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=500, 0 otherwise.
-##' @param combine logical: should counts and percents be combined to the popular \code{"Count(percent)"} format, or presented side-by-side? (default \code{TRUE}) 
-##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
-##' @param testname string, the *name* of a function to run a significance test on the table. Default \code{NULL} (no test).
-##' @param pround number of significant digits in test p-value representation. Default 3.
-##' @param testBelow logical, should test p-value be placed right below the table? Default \code{FALSE}, which places it next to the table's right edge, one row below the column headings
-##' @param ... additional arguments as needed, to pass on to \code{get(textfun)}; for example, the reference frequencies for a Chi-Squared GoF test.
+##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=500 or if using \code{\link{XLunivariate}}, and 0 otherwise.
+##' @param ... additional arguments as needed, to pass on to \code{fun}; for example, non-default summary function choices for \code{\link{XLunivariate}}.
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##'
 ##' @export
