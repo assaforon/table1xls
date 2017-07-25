@@ -34,12 +34,13 @@
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
 ##' @param digits numeric: how many digits (after the decimal point) to show in the percents? Defaults to 1 if n>=500 or if using \code{\link{XLunivariate}}, and 0 otherwise.
+##' @param useNA How to handle missing values. Passed on to \code{\link{table}} (see help on that function for options).
 ##' @param ... additional arguments as needed, to pass on to \code{fun}; for example, non-default summary function choices for \code{\link{XLunivariate}}.
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##'
 ##' @export
 
-XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,title="Table 1",rowTitle="Variable",colTitle=NULL,colNames=NULL,row1=1,col1=1,digits=NULL,...,purge=FALSE)
+XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,title="Table 1",rowTitle="Variable",colTitle=NULL,colNames=NULL,row1=1,col1=1,digits=NULL,useNA='ifany',...,purge=FALSE)
 { 
   dims=dim(DF)
   if(length(dims)!=2) stop("Input must be rectangular array/DF.\n")
@@ -75,7 +76,7 @@ nvar=dims[2]
 ## Tabulating the variables
 for(a in 1:nvar)
 {
-  fun(wb,sheet,DF[,a],colvar=colvar,table1mode=TRUE,row1=row1,col1=col1,rowTitle=names(DF)[a],colNames=colNames,digits=digits,...)
+  fun(wb,sheet,DF[,a],colvar=colvar,table1mode=TRUE,row1=row1,col1=col1,rowTitle=names(DF)[a],colNames=colNames,digits=digits,useNA=useNA,...)
 
   ## Removing some fluff output
   if(a>1) 
@@ -93,7 +94,7 @@ if(identical(fun,XLoneWay))
 if(identical(fun,XLtwoWay))
 {
   XLaddText(wb,sheet,paste("Sample Sizes (total ",n,")",sep=''),row1=row1,col1=col1)
-  enns=table(colvar,...)
+  enns=table(colvar,useNA=useNA)
   npct=paste(enns," (",niceRound(100*enns/n,digits),"%)",sep='')
   for (b in 1:(1+length(unique(colvar)))) XLaddText(wb,sheet,npct[b],row1=row1,col1=col1+b)
 }

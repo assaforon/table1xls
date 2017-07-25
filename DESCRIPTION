@@ -3,7 +3,7 @@ Type: Package
 Title: Produces Summary Tables and Exports Them to Multi-Tab Spreadsheet Format
     (.xls or .xlsx)
 Version: 0.4.0
-Date: 2017-01-xx
+Date: 2017-07-25
 Author: Assaf P. Oron
 Maintainer: Assaf P. Oron <assaf.oron@seattlechildrens.org>
 Authors@R: if (file.exists('DESCRIPTION') && !file.exists('man/XLoneWay.Rd')) roxygen2::roxygenize('.');
@@ -13,4 +13,4 @@ Description: A collection of time-saving wrappers for producing and exporting
 License: GPL-3
 Imports:
     XLConnect
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
