@@ -168,6 +168,7 @@ saveWorkbook(wb)
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character vector of row names. Default behavior (\code{NULL}): automatically determined from data
+##' @param colNames column names for stratifying variable, used when \code{sideBySide=TRUE}. Default: equal to \code{rowNames}.
 ##' @param ord numeric vector specifying row-index order (i.e., a re-ordering of \code{rowvar}'s levels) in the produced table. Default (\code{NULL}) is no re-ordering.
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical: should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})
@@ -175,7 +176,7 @@ saveWorkbook(wb)
 ##'
 ##' @export
 
-XLunivariate<-function(wb,sheet,calcvar,colvar=rep("",length(calcvar)),table1mode=FALSE,fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),sideBySide=FALSE,title=NULL,rowTitle="",rowNames=NULL,colNames=NULL,ord=NULL,row1=1,col1=1,purge=FALSE,...)
+XLunivariate<-function(wb,sheet,calcvar,colvar=rep("",length(calcvar)),table1mode=FALSE,fun1=list(fun=roundmean,name="Mean"),fun2=list(fun=roundSD,name="SD"),seps=c('',' (',')'),sideBySide=FALSE,title=NULL,rowTitle="",rowNames=NULL,colNames=rowNames,ord=NULL,row1=1,col1=1,purge=FALSE,...)
 { 
 if(table1mode) 
 {
@@ -190,6 +191,7 @@ if(!existsSheet(wb,sheet)) createSheet(wb,sheet)
 num1=tapply(calcvar,colvar,fun1$fun,...)
 num2=tapply(calcvar,colvar,fun2$fun,...)
 if (is.null(ord)) ord=1:length(num1)
+if(length(ord)!=length(num1)) stop("Argument 'ord' in XLunivariate has wrong length.")
 if (is.null(rowNames)) rowNames=names(num1)
 
 statname=paste(seps[1],fun1$name,seps[2],fun2$name,seps[3],sep='')
@@ -198,6 +200,7 @@ if(sideBySide)
   outdat=data.frame(statname)
   if(table1mode) {rowTitle=statname;outdat[1]=rowNames}
   for (a in ord) outdat=cbind(outdat,paste(seps[1],num1[a],seps[2],num2[a],seps[3],sep=''))
+  if(!is.null(colNames) && length(colNames)==length(ord)) names(num1)=colNames
   names(outdat)=c(rowTitle,names(num1)[ord])
   ord=1
 } else {

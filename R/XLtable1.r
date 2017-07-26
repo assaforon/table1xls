@@ -40,7 +40,7 @@
 ##'
 ##' @export
 
-XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,title="Table 1",rowTitle="Variable",colTitle=NULL,colNames=NULL,row1=1,col1=1,digits=NULL,useNA='ifany',...,purge=FALSE)
+XLtable1<-function(wb,sheet,DF,colvar=NULL,fun=XLoneWay,title="Table 1",colTitle=NULL,colNames=NULL,row1=1,col1=1,digits=NULL,useNA='ifany',...,purge=FALSE)
 { 
   dims=dim(DF)
   if(length(dims)!=2) stop("Input must be rectangular array/DF.\n")

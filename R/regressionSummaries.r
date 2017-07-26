@@ -19,6 +19,7 @@
 ##' @param varnames character: a vector of effect names (column 1 of output table). If \code{NULL} (default), user needs to specify them via the \code{betas} matrix.
 ##' @param colid integer: vector of indices for the columns containing the point estimates and SEs, respectively. Used only if \code{betas} is a matrix.
 ##' @param transfun transformation function for \code{betas,SE}, to produce columns 2-3 of the output. Defaults to \code{\link{identity}}. use {\code{\link{exp}}} for odds ratio or relative risk.
+##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param effname character: a string explaining what the effect stands for, e.g. "difference" (the default), "Odds Ratio", etc.
 ##' @param alpha numeric, Type I error for CIs. Default 0.05 for 95\% CIs.
 ##' @param df numeric, residual degrees of freedom. If a finite value is provided, t-distribution p-value and CIs will be calculated; otherwise Normality is assumed. Default \code{NA}.

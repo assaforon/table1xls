@@ -22,6 +22,7 @@
 ##' @param title character: an optional overall title to the table. Default (\code{NULL}) is no title.
 ##' @param rowTitle character: the title to be placed above the row name column (default empty string)
 ##' @param rowNames character: vector of row names. Default behavior (\code{NULL}): automatically determined from data
+##' @param colNames dummy argument for compatibility with calls from [XLtable1()]. Otherwise ignored by function.
 ##' @param ord numeric vector specifying row-index order in the produced table. Default (\code{NULL}) is no re-ordering.
 ##' @param row1,col1 numeric: the first row and column occupied by the table (title included if relevant).
 ##' @param purge logical should \code{sheet} be created anew, by first removing the previous copy if it exists? (default \code{FALSE})

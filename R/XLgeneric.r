@@ -29,7 +29,6 @@
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##'
 ##' @export
-##' @import XLConnect
 
 XLgeneric<-function(wb,sheet,dataset,title=NULL,addRownames=FALSE,rowNames=rownames(dataset),rowTitle="Name",colNames=NULL,row1=1,col1=1,purge=FALSE)
 { 
