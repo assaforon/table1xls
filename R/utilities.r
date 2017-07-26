@@ -138,7 +138,7 @@ setColumnWidth(wb, sheet = sheet, column = col1, width=-1)
 ##' Rounds numbers to always have the specified number of decimal digits, rather than R's "greedy" most-compact rounding convention. Includes optional "<0.0..." override adequate for representing small p-values.
 ##' 
 ##' 
-##' R's standard \code{\link{round}} utility rounds to at *most* the number of digits specified. When the number happens to round more "compactly", it rounds to fewer digits. Thus, for example, `round(4.03,digits=2)` yields 4 as an answer. This is undesirable when trying to format a table, e.g., for publication.
+##' R's standard \code{\link{round}} utility rounds to at *most* the number of digits specified. When the number happens to round more "compactly", it rounds to fewer digits. Thus, for example, `round(4.03,digits=1)` yields 4 as an answer. This is undesirable when trying to format a table, e.g., for publication.
 ##' 
 ##' \code{niceRound} solves this problem by wrapping a \code{\link{format}} call around the \code{\link{round}} call. The result will always have `digits` decimal digits. In addition, since reporting p-values always involves rounding, if the argument `plurb` is \code{TRUE}, then values below the rounding thresholds will be represented using the "less than" convention. For example, with \code{digits=3} and \code{plurb=TRUE}, the number 0.0004 will be represented as \code{<0.001}.
 ##' 
