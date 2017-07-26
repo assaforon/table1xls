@@ -1,9 +1,6 @@
-Version 0.4.0 Release Notes (winter/spring 2017) 
+Version 0.4.0 Release Notes (spring-summer 2017) 
 ==============================
 
-Bumped first decimal, because stuff.
-
-Bug fixes:
 
 New features:
 
@@ -13,7 +10,7 @@ New features:
  - Introduced `niceRound', a proper-rounding utility useful beyond this package.
  - `XLtwoWay' now reports Chi-squared p-values as default. User can provide another test function, or suppress the test.
  - Similarly for `XLoneWay`, except here the default is no test, b/c wanting to p-value a one-way table is far less common.
- - Added Yihui's "roxygenize hack" to DESCRIPTION, to enable full help files when installing from GitHub.
+ - Added Yihui's "roxygenize hack" to DESCRIPTION, to enable full help files when installing from GitHub. Not included in CRAN version, per CRAN requirements.
 
 
 Version 0.3.2 Release Notes (summer 2016) 

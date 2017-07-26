@@ -23,6 +23,8 @@ List of major functions:
  - `XLaddText` to add comments anywhere in the spreadsheet
  - **New for 0.4.0!** `XLtable1` to export an omnibus battery of tables typically encountered in Table 1 of an article. All tables must be of the same type, from among one-way, two-way or continuous.
  
+Also worthy of mention is `niceRound`, a generally useful utility that reports numbers rounded to the actual specified number of digits, rather than annoyingly dropping digits if the number is "too round".
+ 
 
 This package is available on GitHub (live copy) CRAN (periodic updates). If you get it from here, then when compiling the package, you might need to roxygenize to get all the help files.
 
