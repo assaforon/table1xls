@@ -45,7 +45,7 @@ Where \code{YYYY} is the virtual-memory size in MB. The default is only 128 MB. 
 Assaf P. Oron.
 
 
-Maintainer: Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+Maintainer: Assaf P. Oron \code{<aoron@idmod.org>}
 }
 
 

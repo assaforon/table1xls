@@ -9,7 +9,7 @@
 ##' 
 ##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron@idmod.org>}
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##' @example inst/examples/ExRegress.r 
 ##' @param wb a \code{\link[XLConnect]{workbook-class}} object
