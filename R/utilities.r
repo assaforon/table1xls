@@ -18,7 +18,7 @@
 ##' @return an XLConnect workbook object.
 ##' @example inst/examples/ExOpen.r
 ##' 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' 
 ##' @seealso \code{\link{loadWorkbook}}, \code{\link{saveWorkbook}}
 ##' @export
@@ -55,7 +55,7 @@ loadWorkbook(path,create=TRUE)
 ##' 
 ##' @seealso \code{\link{XLunivariate}} which is the main function calling these utilities.
 ##' 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' 
 ##' @export
 
@@ -147,7 +147,7 @@ setColumnWidth(wb, sheet = sheet, column = col1, width=-1)
 ##' @param digits the desired number of decimal digits
 ##' @param plurb logical, should the p-value-style "less-than blurb" convention be used? Default \code{FALSE}.
 ##' @export
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' @seealso \code{\link{round}},\code{\link{format}}
 ##' 
 niceRound<-function(numbers,digits=0,plurb=FALSE)

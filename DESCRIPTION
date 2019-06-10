@@ -2,8 +2,8 @@ Package: table1xls
 Type: Package
 Title: Exports Reproducible Summary Tables to Multi-Tab Spreadsheet Files
     (.xls or .xlsx)
-Version: 0.4.0
-Date: 2017-07-26
+Version: 0.4.1
+Date: 2019-06-10
 Author: Assaf P. Oron [cre, aut]
 Authors@R: if (file.exists('DESCRIPTION') && !file.exists('man/XLoneWay.Rd')) roxygen2::roxygenize('.');
     person('Assaf P.','Oron', role=c('cre','aut'), email='aoron@idmod.org')

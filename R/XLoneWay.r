@@ -8,7 +8,7 @@
 ##' 
 ##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 ##' 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' @seealso If interested in other descriptive summaries, see \code{\link{XLunivariate}}. For two-way contingency tables, see \code{\link{XLtwoWay}}.
 ##' 
 ##' 

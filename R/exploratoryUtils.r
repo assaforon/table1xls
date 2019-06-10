@@ -71,7 +71,7 @@ return(list(Counts=tout,Percent=pout))
 ##' 
 ##' @return The function returns invisibly, after writing the data into \code{sheet}.
 ##' @example inst/examples/Ex2way.r 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet. See \code{\link{setStyleAction}} to control the output style. If interested in one-way tables, see \code{\link{XLoneWay}}.
 ##' @note This function uses the internal function \code{fancytab2} which produces 2-way tables with counts, percentages and margins. 
 
@@ -150,7 +150,7 @@ saveWorkbook(wb)
 
 ##' @return The function returns invisibly, after writing the data into \code{sheet} and saving the file.
 ##' 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' @seealso Uses \code{\link{writeWorksheet}} to access the spreadsheet, \code{\link{rangeString}} for some utilities that can be used as \code{fun1$fun,fun2$fun}. For one-way (univariate) contingency tables, \code{\link{XLoneWay}}. 
 ##' 
 

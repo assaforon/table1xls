@@ -16,7 +16,7 @@
 ##' 
 ##' See the \code{\link{XLtwoWay}} help page, for behavior regarding new-sheet creation, overwriting, etc.
 ##' 
-##' @author Assaf P. Oron \code{<assaf.oron.at.seattlechildrens.org>}
+##' @author Assaf P. Oron \code{<aoron.at.idmod.org>}
 ##' @seealso \code{\link{XLoneWay}},\code{\link{XLtwoWay}},\code{\link{XLunivariate}}.
 ##' 
 ##' 
