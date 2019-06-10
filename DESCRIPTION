@@ -13,5 +13,5 @@ Description: A collection of time-saving wrappers for reproducible export of
 License: GPL-3
 Imports:
     XLConnect
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
