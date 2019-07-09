@@ -5,14 +5,7 @@
 \title{Publication-Grade Tables Exported to .xls/.xlsx spreadsheets}
 \description{Generate tabular summaries in formats commonly found in scientific articles, and export them to Office-compatible spreadsheet document (.xls/.xlsx format).}
 
-\details{
-\tabular{ll}{
-Package: \tab table1xls\cr
-Type: \tab Package\cr
-Version: \tab 0.4.1\cr
-Date: \tab 2019-06-10\cr
-License: \tab GPL-3\cr
-}
+
 Any statistician collaborating with scientists, especially in the health sciences, has to produce publication-grade summary tables. Most commonly these are "Table 1" style basic demographics, contingency tables, or regression-output summaries. As a minimum, statisticians need to provide tables, from which the lead author can easily and accurately generate these tables.
 
 Outside of physics and mathematical fields, the vast majority of scientific investigators edit their manuscripts and tables in office-type software, usually the Microsoft suite. R can easily output data in \code{.csv} format; however, the analyst or someone in the investigative team still has to perform tedious work formatting the tables using office software, into a template that the lead author can use. Moreover, the manner in which regression summaries appear in manuscripts, is quite different from the typical output of \code{\link{summary.glm}} and similar R functions.
